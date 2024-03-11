@@ -1,10 +1,23 @@
 package livraria.model;
 
+import livraria.model.Autor;
+import livraria.model.Editora;
+
 public class Livro {
     private int id;
     private String nome_livro;
     private String descricao;
     private int ano_publicacao;
+    private Autor autor;
+    private Editora editora;
+
+    public Editora getEditora() {
+        return editora;
+    }
+
+    public void setEditora(Editora editora) {
+        this.editora = editora;
+    }
 
     public int getId() {
         return id;
@@ -36,6 +49,14 @@ public class Livro {
 
     public void setAno_publicacao(int ano_publicacao) {
         this.ano_publicacao = ano_publicacao;
+    }
+
+    public Autor getAutor() {
+        return autor;
+    }
+
+    public void setAutor(Autor autor) {
+        this.autor = autor;
     }
 
 }
