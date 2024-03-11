@@ -1,8 +1,127 @@
 package livraria.repository;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
+
 import livraria.model.Livro;
 import livraria.repository.DBConnection;
 
 public class DaoLivro {
+	public boolean inserir(Livro livro) {
+		try {
+			Connection connection = DBConnection.getInstance().getConnection();
+			String insert = "INSERT INTO livro (id, nome_livro, descricao, ano_publicacao, autor, editora) values" +  "(?, ?, ?, ?, ?, ?)";
+			PreparedStatement preparedStatement1 = connection.prepareStatement(insert);
+			preparedStatement1.setInt(1, livro.getId());
+			preparedStatement1.setString(2, livro.getNome_livro());
+			preparedStatement1.setString(3, livro.getDescricao());
+			preparedStatement1.setInt(4, livro.getAno_publicacao());
+			preparedStatement1.setAutor(5, livro.getAutor());
+			preparedStatement1.setEditora(6, livro.getEditora());
+			int resultado = preparedStatement1.executeUpdate();
+			if(resultado>0) {
+				return true;
+			}else {
+				return false;
+			}
+			
+		}catch (Exception e) {
+			System.out.println(e.getMessage());
+			return false;
+		}
+	}
+
+    public boolean alterar(Livro livro) {
+		try {
+			Connection connection = DBConnection.getInstance().getConnection();
+			String update = "UPDATE livro set nome_livro = ?, descricao = ?, ano_publicacao  = ?, autor = ?, editora = ? where id = ?";
+			PreparedStatement preparedStatement1 = connection.prepareStatement(update);
+			preparedStatement1.setInt(6, livro.getId());
+			preparedStatement1.setString(1, livro.getNome_livro());
+			preparedStatement1.setString(2, livro.getDescricao());
+			preparedStatement1.setInt(3, livro.getAno_publicacao());
+			preparedStatement1.setAutor(4, livro.getAutor());
+			preparedStatement1.setEditora(5, livro.getEditora());
+			int resultado = preparedStatement1.executeUpdate();
+			if(resultado>0) {
+				return true;
+			}else {
+				return false;
+			}
+			
+		}catch (Exception e) {
+			return false;
+		}
+	}
+
+    public boolean excluir(Livro livro) {
+		try {
+			Connection connection = DBConnection.getInstance().getConnection();
+			String delete = "DELETE from livro where id = ?";
+			PreparedStatement preparedStatement1 = connection.prepareStatement(delete);
+			preparedStatement1.setInt(1, livro.getId());
+			int resultado = preparedStatement1.executeUpdate();
+			if(resultado>0) {
+				return true;
+			}else {
+				return false;
+			}
+			
+		}catch (Exception e) {
+			return false;
+		}
+	}
+
+    public List<Livro> pesquisar(int id) {
+		try {
+			Connection connection = DBConnection.getInstance().getConnection();
+			String consulta = "SELECT * from livro where id = ?";
+			Livro livro = new Livro();
+			List<Livro> listaLivros = new ArrayList<Livro>();
+			PreparedStatement preparedStatement = connection.prepareStatement(consulta);
+			preparedStatement.setInt(1, id);
+			ResultSet resultSet = preparedStatement.executeQuery();
+			while(resultSet.next()) {
+				livro.setId(resultSet.getInt("id"));
+				livro.setNome_livro(resultSet.getString("nome_livro"));
+				livro.setDescricao(resultSet.getString("descricao"));
+				livro.setAno_publicacao(resultSet.getInt("ano_publicacao"));
+				livro.setAutor(resultSet.getAutor("autor"));
+				livro.setEditora(resultSet.getEditora("editora"));
+				listaLivros.add(livro);
+			}
+			return listaLivros;
+		}catch (Exception e) {
+			return null;
+		}
+	}
+	
+	public List<Livro> pesquisarTodos() {
+		try {
+			Connection connection = DBConnection.getInstance().getConnection();
+			String consulta = "SELECT * from livro";
+			List<Livro> lista = new ArrayList<Livro>();
+			Livro livro;
+			PreparedStatement preparedStatement = connection.prepareStatement(consulta);
+			ResultSet resultSet = preparedStatement.executeQuery();
+			while(resultSet.next()) {
+				livro = new Livro();
+				livro.setId(resultSet.getInt("id"));
+				livro.setNome_livro(resultSet.getString("nome_livro"));
+				livro.setDescricao(resultSet.getString("descricao"));
+				livro.setAno_publicacao(resultSet.getInt("ano_publicacao"));
+				livro.setAutor(resultSet.getAutor("autor"));
+				livro.setEditora(resultSet.getEditora("editora"));
+				lista.add(livro);
+			}
+			return lista;
+		}catch (Exception e) {
+			return null;
+		}
+	}
+
 
 }
