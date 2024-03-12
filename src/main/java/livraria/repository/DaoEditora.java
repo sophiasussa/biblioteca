@@ -35,8 +35,8 @@ public class DaoEditora {
 			Connection connection = DBConnection.getInstance().getConnection();
 			String update = "UPDATE editora set nome_editora = ? where id = ?";
 			PreparedStatement preparedStatement1 = connection.prepareStatement(update);
-			preparedStatement1.setInt(1, editora.getId());
-			preparedStatement1.setString(2, editora.getNome_editora());
+			preparedStatement1.setString(1, editora.getNome_editora());
+            preparedStatement1.setInt(2, editora.getId());
 			int resultado = preparedStatement1.executeUpdate();
 			if(resultado>0) {
 				return true;
@@ -105,4 +105,6 @@ public class DaoEditora {
 		}catch (Exception e) {
 			return null;
 		}
+    }
 }
+

@@ -29,8 +29,8 @@ public class DaoEmprestimo {
 			Connection connection = DBConnection.getInstance().getConnection();
 			String update = "UPDATE emprestimo set data_emprestimo = ? where id = ?";
 			PreparedStatement preparedStatement1 = connection.prepareStatement(update);
-			preparedStatement1.setInt(1, emprestimo.getId());
-			preparedStatement1.setString(2, emprestimo.getData_emprestimo());
+			preparedStatement1.setInt(2, emprestimo.getId());
+			preparedStatement1.setString(1, emprestimo.getData_emprestimo());
 			int resultado = preparedStatement1.executeUpdate();
 			if(resultado>0) {
 				return true;
