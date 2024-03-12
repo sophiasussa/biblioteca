@@ -1,6 +1,6 @@
 package livraria.model;
 
-public class empre_livro {
+public class Empre_livro {
     private int id;
     private Emprestimo emprestimo;
     private Livro livro;
