@@ -4,6 +4,7 @@ public class Edicao {
     private int id;
     private int ano;
     private String novo_conteudo;
+    private Livro livro;
     
     public int getId() {
         return id;
@@ -22,6 +23,12 @@ public class Edicao {
     }
     public void setNovo_conteudo(String novo_conteudo) {
         this.novo_conteudo = novo_conteudo;
+    }
+    public Livro getLivro() {
+        return livro;
+    }
+    public void setLivro(Livro livro) {
+        this.livro = livro;
     }
     
 }
