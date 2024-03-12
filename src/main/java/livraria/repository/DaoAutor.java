@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import livraria.model.Autor;
-import livraria.repository.DBConnection;
 
 public class DaoAutor {
     public boolean inserir(Autor autor) {

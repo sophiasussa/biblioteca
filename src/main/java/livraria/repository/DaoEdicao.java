@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import livraria.model.Edicao;
-import livraria.repository.DBConnection;
 
 public class DaoEdicao {
 	public boolean inserir(Edicao edicao) {

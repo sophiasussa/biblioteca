@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import livraria.model.Livro;
-import livraria.repository.DBConnection;
 
 public class DaoLivro {
 	public boolean inserir(Livro livro) {

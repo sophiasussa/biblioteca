@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import livraria.model.Emprestimo;
-import livraria.repository.DBConnection;
 
 public class DaoEmprestimo {
 	public boolean inserir(Emprestimo emprestimo) {
