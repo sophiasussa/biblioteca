@@ -13,14 +13,12 @@ public class DaoLivro {
 	public boolean inserir(Livro livro) {
 		try {
 			Connection connection = DBConnection.getInstance().getConnection();
-			String insert = "INSERT INTO livro (id, nome_livro, descricao, ano_publicacao, autor, editora) values" +  "(?, ?, ?, ?, ?, ?)";
+			String insert = "INSERT INTO livro (id, nome_livro, descricao, ano_publicacao) values" +  "(?, ?, ?, ?)";
 			PreparedStatement preparedStatement1 = connection.prepareStatement(insert);
 			preparedStatement1.setInt(1, livro.getId());
 			preparedStatement1.setString(2, livro.getNome_livro());
 			preparedStatement1.setString(3, livro.getDescricao());
 			preparedStatement1.setInt(4, livro.getAno_publicacao());
-			preparedStatement1.setAutor(5, livro.getAutor());
-			preparedStatement1.setEditora(6, livro.getEditora());
 			int resultado = preparedStatement1.executeUpdate();
 			if(resultado>0) {
 				return true;
@@ -37,14 +35,12 @@ public class DaoLivro {
     public boolean alterar(Livro livro) {
 		try {
 			Connection connection = DBConnection.getInstance().getConnection();
-			String update = "UPDATE livro set nome_livro = ?, descricao = ?, ano_publicacao  = ?, autor = ?, editora = ? where id = ?";
+			String update = "UPDATE livro set nome_livro = ?, descricao = ?, ano_publicacao  = ? where id = ?";
 			PreparedStatement preparedStatement1 = connection.prepareStatement(update);
-			preparedStatement1.setInt(6, livro.getId());
+			preparedStatement1.setInt(4, livro.getId());
 			preparedStatement1.setString(1, livro.getNome_livro());
 			preparedStatement1.setString(2, livro.getDescricao());
 			preparedStatement1.setInt(3, livro.getAno_publicacao());
-			preparedStatement1.setAutor(4, livro.getAutor());
-			preparedStatement1.setEditora(5, livro.getEditora());
 			int resultado = preparedStatement1.executeUpdate();
 			if(resultado>0) {
 				return true;
@@ -89,8 +85,6 @@ public class DaoLivro {
 				livro.setNome_livro(resultSet.getString("nome_livro"));
 				livro.setDescricao(resultSet.getString("descricao"));
 				livro.setAno_publicacao(resultSet.getInt("ano_publicacao"));
-				livro.setAutor(resultSet.getAutor("autor"));
-				livro.setEditora(resultSet.getEditora("editora"));
 				listaLivros.add(livro);
 			}
 			return listaLivros;
@@ -113,8 +107,6 @@ public class DaoLivro {
 				livro.setNome_livro(resultSet.getString("nome_livro"));
 				livro.setDescricao(resultSet.getString("descricao"));
 				livro.setAno_publicacao(resultSet.getInt("ano_publicacao"));
-				livro.setAutor(resultSet.getAutor("autor"));
-				livro.setEditora(resultSet.getEditora("editora"));
 				lista.add(livro);
 			}
 			return lista;

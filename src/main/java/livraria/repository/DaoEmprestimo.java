@@ -1,5 +1,11 @@
 package livraria.repository;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
+
 import livraria.model.Emprestimo;
 import livraria.repository.DBConnection;
 
@@ -10,7 +16,7 @@ public class DaoEmprestimo {
 			String insert = "INSERT INTO emprestimo (id, data_emprestimo) values" +  "(?, ?)";
 			PreparedStatement preparedStatement1 = connection.prepareStatement(insert);
 			preparedStatement1.setInt(1, emprestimo.getId());
-			preparedStatement1.setString(2, emprestimo.getData_emprestimo());
+			preparedStatement1.setInt(2, emprestimo.getData_emprestimo());
 			int resultado = preparedStatement1.executeUpdate();
 			if(resultado>0) {
 				return true;
@@ -30,7 +36,7 @@ public class DaoEmprestimo {
 			String update = "UPDATE emprestimo set data_emprestimo = ? where id = ?";
 			PreparedStatement preparedStatement1 = connection.prepareStatement(update);
 			preparedStatement1.setInt(2, emprestimo.getId());
-			preparedStatement1.setString(1, emprestimo.getData_emprestimo());
+			preparedStatement1.setInt(1, emprestimo.getData_emprestimo());
 			int resultado = preparedStatement1.executeUpdate();
 			if(resultado>0) {
 				return true;
@@ -72,7 +78,7 @@ public class DaoEmprestimo {
 			ResultSet resultSet = preparedStatement.executeQuery();
 			while(resultSet.next()) {
 				emprestimo.setId(resultSet.getInt("id"));
-				emprestimo.setData_emprestimo(resultSet.getString("data_emprestimo"));
+				emprestimo.setData_emprestimo(resultSet.getInt("data_emprestimo"));
 				listaEmprestimos.add(emprestimo);
 			}
 			return listaEmprestimos;
@@ -92,7 +98,7 @@ public class DaoEmprestimo {
 			while(resultSet.next()) {
 				emprestimo = new Emprestimo();
 				emprestimo.setId(resultSet.getInt("id"));
-				emprestimo.setData_emprestimo(resultSet.getString("data_emprestimo"));
+				emprestimo.setData_emprestimo(resultSet.getInt("data_emprestimo"));
 				lista.add(emprestimo);
 			}
 			return lista;
