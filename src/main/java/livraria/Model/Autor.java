@@ -1,9 +1,5 @@
 package livraria.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
-
 public class Autor {
     private int id;
     private String nome_autor;
