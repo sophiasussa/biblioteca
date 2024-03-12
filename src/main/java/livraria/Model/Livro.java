@@ -5,6 +5,7 @@ public class Livro {
     private String nome_livro;
     private String descricao;
     private int ano_publicacao;
+    private Autor autor;
 
     public int getId() {
         return id;
@@ -36,6 +37,23 @@ public class Livro {
 
     public void setAno_publicacao(int ano_publicacao) {
         this.ano_publicacao = ano_publicacao;
+    }
+    
+    public Autor getAutor() {
+        return autor;
+    }
+
+    public void setAutor(Autor autor) {
+        this.autor = autor;
+    }
+    private Editora editora;
+
+    public Editora getEditora() {
+        return editora;
+    }
+
+    public void setEditora(Editora editora) {
+        this.editora = editora;
     }
 
 
