@@ -12,11 +12,12 @@ public class DaoEdicao {
 	public boolean inserir(Edicao edicao) {
 		try {
 			Connection connection = DBConnection.getInstance().getConnection();
-			String insert = "INSERT INTO edicao (id, ano, novo_conteudo) values" +  "(?, ?, ?)";
+			String insert = "INSERT INTO edicao (id, ano, novo_conteudo, livro) values" +  "(?, ?, ?, ?)";
 			PreparedStatement preparedStatement1 = connection.prepareStatement(insert);
 			preparedStatement1.setInt(1, edicao.getId());
             preparedStatement1.setInt(2, edicao.getAno());
 			preparedStatement1.setString(3, edicao.getNovo_conteudo());
+			preparedStatement1.setInt(4, edicao.getLivro().getId());
 			int resultado = preparedStatement1.executeUpdate();
 			if(resultado>0) {
 				return true;
@@ -33,11 +34,12 @@ public class DaoEdicao {
     public boolean alterar(Edicao edicao) {
 		try {
 			Connection connection = DBConnection.getInstance().getConnection();
-			String update = "UPDATE edicao set ano = ?, novo_conteudo = ? where id = ?";
+			String update = "UPDATE edicao set ano = ?, novo_conteudo = ?, autor = ? where id = ?";
 			PreparedStatement preparedStatement1 = connection.prepareStatement(update);
             preparedStatement1.setInt(1, edicao.getAno());
 			preparedStatement1.setString(2, edicao.getNovo_conteudo());
-            preparedStatement1.setInt(3, edicao.getId());
+			preparedStatement1.setInt(3, edicao.getLivro().getId());
+            preparedStatement1.setInt(4, edicao.getId());
 			int resultado = preparedStatement1.executeUpdate();
 			if(resultado>0) {
 				return true;
@@ -80,6 +82,7 @@ public class DaoEdicao {
 			while(resultSet.next()) {
 				edicao.setId(resultSet.getInt("id"));
                 edicao.setAno(resultSet.getInt("ano"));
+				edicao.setLivro(resultSet.getInt(consulta));
 				edicao.setNovo_conteudo(resultSet.getString("novo_conteudo"));
 				listaEdicaos.add(edicao);
 			}
