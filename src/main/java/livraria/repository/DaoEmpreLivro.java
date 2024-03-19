@@ -7,9 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import livraria.model.EmpreLivro;
-import livraria.model.Emprestimo;
 
-public class DaoEmpre_livro {
+public class DaoEmpreLivro {
     public boolean inserir(EmpreLivro empre_livro){
         try{
             Connection connection = DBConnection.getInstance().getConnection();
