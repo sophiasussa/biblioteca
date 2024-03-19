@@ -6,11 +6,11 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
-import livraria.model.Empre_livro;
+import livraria.model.EmpreLivro;
 import livraria.model.Emprestimo;
 
 public class DaoEmpre_livro {
-    public boolean inserir(Empre_livro empre_livro){
+    public boolean inserir(EmpreLivro empre_livro){
         try{
             Connection connection = DBConnection.getInstance().getConnection();
             String insert = "INSERT into empre_livro (id, emprestimo, livro) values (?, ?, ?)";
@@ -30,7 +30,7 @@ public class DaoEmpre_livro {
 		}
         
     }
-    public boolean alterar(Empre_livro empre_livro){
+    public boolean alterar(EmpreLivro empre_livro){
         try{
             Connection connection = DBConnection.getInstance().getConnection();
             String update = "UPDATE empre_livro set emprestimo = ?, livro = ? where id = ?";
@@ -49,7 +49,7 @@ public class DaoEmpre_livro {
 			return false;
 		}
     }
-    public boolean excluir(Empre_livro empre_livro){
+    public boolean excluir(EmpreLivro empre_livro){
         try{
             Connection connection = DBConnection.getInstance().getConnection();
             String delete = "Delete from empre_livro where id = ?";
@@ -67,12 +67,12 @@ public class DaoEmpre_livro {
 		}
     }
 
-    public List<Empre_livro> pesquisar(int id){
+    public List<EmpreLivro> pesquisar(int id){
         try{
             Connection connection = DBConnection.getInstance().getConnection();
             String consulta = "SELECT * from empre_livro where id = ?";
-            Empre_livro empre_livro = new Empre_livro();
-            List<Empre_livro> lista = new ArrayList<Empre_livro>();
+            EmpreLivro empre_livro = new EmpreLivro();
+            List<EmpreLivro> lista = new ArrayList<EmpreLivro>();
             PreparedStatement preparedStatement1 = connection.prepareStatement(consulta);
             preparedStatement1.setInt(1, empre_livro.getId());
             ResultSet resultSet = preparedStatement1.executeQuery();
@@ -87,16 +87,16 @@ public class DaoEmpre_livro {
         }
     }
 
-    public List<Empre_livro> pesquisarTodos() {
+    public List<EmpreLivro> pesquisarTodos() {
 		try {
 			Connection connection = DBConnection.getInstance().getConnection();
 			String consulta = "SELECT * from empre_livro";
-			List<Empre_livro> lista = new ArrayList<Empre_livro>();
-			Empre_livro empre_livro;
+			List<EmpreLivro> lista = new ArrayList<EmpreLivro>();
+			EmpreLivro empre_livro;
 			PreparedStatement preparedStatement = connection.prepareStatement(consulta);
 			ResultSet resultSet = preparedStatement.executeQuery();
 			while(resultSet.next()) {
-				empre_livro = new Empre_livro();
+				empre_livro = new EmpreLivro();
 				empre_livro.setId(resultSet.getInt("id"));
 			//	empre_livro.setData_empre_livro(resultSet.getInt("data_empre_livro"));
 				lista.add(empre_livro);
