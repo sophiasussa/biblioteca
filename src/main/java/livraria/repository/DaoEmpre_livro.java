@@ -2,6 +2,7 @@ package livraria.repository;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -74,7 +75,35 @@ public class DaoEmpre_livro {
             List<Empre_livro> lista = new ArrayList<Empre_livro>();
             PreparedStatement preparedStatement1 = connection.prepareStatement(consulta);
             preparedStatement1.setInt(1, empre_livro.getId());
+            ResultSet resultSet = preparedStatement1.executeQuery();
+            while(resultSet.next()) {
+                empre_livro.setId(resultSet.getInt("id"));
+          //      empre_livro.setData_empre_livro(resultSet.getInt("data_emprestimo"));
+                lista.add(empre_livro);
+            }
+            return lista;
+        }catch (Exception e) {
+            return null;
         }
     }
-}
 
+    public List<Empre_livro> pesquisarTodos() {
+		try {
+			Connection connection = DBConnection.getInstance().getConnection();
+			String consulta = "SELECT * from empre_livro";
+			List<Empre_livro> lista = new ArrayList<Empre_livro>();
+			Empre_livro empre_livro;
+			PreparedStatement preparedStatement = connection.prepareStatement(consulta);
+			ResultSet resultSet = preparedStatement.executeQuery();
+			while(resultSet.next()) {
+				empre_livro = new Empre_livro();
+				empre_livro.setId(resultSet.getInt("id"));
+			//	empre_livro.setData_empre_livro(resultSet.getInt("data_empre_livro"));
+				lista.add(empre_livro);
+			}
+			return lista;
+		}catch (Exception e) {
+			return null;
+		}
+    }
+}
