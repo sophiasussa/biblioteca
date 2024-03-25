@@ -1,9 +1,9 @@
-package livraria.controller;
+package com.example.application.controller;
 
 import java.util.List;
 
-import livraria.model.Emprestimo;
-import livraria.repository.DaoEmprestimo;
+import com.example.application.model.Emprestimo;
+import com.example.application.repository.DaoEmprestimo;
 
 public class ControllerEmprestimo {
 	DaoEmprestimo dao = new DaoEmprestimo();

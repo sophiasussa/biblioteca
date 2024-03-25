@@ -1,9 +1,9 @@
-package livraria.controller;
+package com.example.application.controller;
 
 import java.util.List;
 
-import livraria.model.Livro;
-import livraria.repository.DaoLivro;
+import com.example.application.model.Livro;
+import com.example.application.repository.DaoLivro;
 
 public class ControllerLivro {
 	DaoLivro dao = new DaoLivro();

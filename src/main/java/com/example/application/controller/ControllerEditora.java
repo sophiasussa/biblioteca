@@ -1,9 +1,9 @@
-package livraria.controller;
+package com.example.application.controller;
 
 import java.util.List;
 
-import livraria.model.Editora;
-import livraria.repository.DaoEditora;
+import com.example.application.model.Editora;
+import com.example.application.repository.DaoEditora;
 
 public class ControllerEditora {
   	DaoEditora dao = new DaoEditora();

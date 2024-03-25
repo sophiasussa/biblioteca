@@ -1,9 +1,9 @@
-package livraria.controller;
+package com.example.application.controller;
 
 import java.util.List;
 
-import livraria.model.Autor;
-import livraria.repository.DaoAutor;
+import com.example.application.model.Autor;
+import com.example.application.repository.DaoAutor;
 
 public class ControllerAutor {
   	DaoAutor dao = new DaoAutor();
