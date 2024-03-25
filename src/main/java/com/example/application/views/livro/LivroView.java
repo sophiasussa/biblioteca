@@ -116,10 +116,10 @@ public class LivroView extends Composite<VerticalLayout> {
         setComboBoxSampleData(comboBox2);
         routerLink.setText("Adicionar Autor");
         routerLink.setRoute(LivroView.class);
-        routerLink.setWidth("min-content");
+        // routerLink.setWidth("min-content");
         routerLink2.setText("Adicionar Editora");
         routerLink2.setRoute(LivroView.class);
-        routerLink2.setWidth("min-content");
+        // routerLink2.setWidth("min-content");
         layoutRow2.setWidthFull();
         layoutColumn4.setFlexGrow(1.0, layoutRow2);
         layoutRow2.addClassName(Gap.MEDIUM);
