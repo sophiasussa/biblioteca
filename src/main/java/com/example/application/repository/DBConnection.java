@@ -1,4 +1,4 @@
-package livraria.repository;
+package com.example.application.repository;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

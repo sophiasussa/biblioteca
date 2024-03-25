@@ -1,4 +1,4 @@
-package livraria.repository;
+package com.example.application.repository;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
-import livraria.model.Edicao;
+import com.example.application.model.Edicao;
 
 public class DaoEdicao {
 	public boolean inserir(Edicao edicao) {
@@ -82,7 +82,7 @@ public class DaoEdicao {
 			while(resultSet.next()) {
 				edicao.setId(resultSet.getInt("id"));
                 edicao.setAno(resultSet.getInt("ano"));
-				edicao.setLivro(resultSet.getInt(consulta));
+			//	edicao.setLivro(resultSet.getInt(consulta));
 				edicao.setNovo_conteudo(resultSet.getString("novo_conteudo"));
 				listaEdicaos.add(edicao);
 			}

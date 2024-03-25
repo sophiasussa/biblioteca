@@ -1,4 +1,4 @@
-package livraria.repository;
+package com.example.application.repository;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
-import livraria.model.Autor;
+import com.example.application.model.Autor;
 
 public class DaoAutor {
     public boolean inserir(Autor autor) {
