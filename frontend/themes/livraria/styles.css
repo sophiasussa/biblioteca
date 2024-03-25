@@ -1,0 +1,11 @@
+@import url('./main-layout.css');
+@import url('./views/emprestimo-view.css');
+@import url('./views/editora-view.css');
+@import url('./views/autor-view.css');
+@import url('./views/livro-view.css');
+    [theme~="dark"] {
+      --lumo-error-color: hsl(3, 63%, 59%);
+      --lumo-error-color-50pct: hsla(3, 63%, 59%, 0.5);
+      --lumo-error-color-10pct: hsla(3, 63%, 59%, 0.1);
+
+    }
