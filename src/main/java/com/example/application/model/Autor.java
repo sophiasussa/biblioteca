@@ -1,4 +1,4 @@
-package livraria.model;
+package com.example.application.model;
 
 public class Autor {
     private int id;
