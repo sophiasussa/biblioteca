@@ -82,8 +82,8 @@ public class DaoEdicao {
 			while(resultSet.next()) {
 				edicao.setId(resultSet.getInt("id"));
                 edicao.setAno(resultSet.getInt("ano"));
-			//	edicao.setLivro(resultSet.getInt(consulta));
 				edicao.setNovo_conteudo(resultSet.getString("novo_conteudo"));
+				edicao.getLivro().setId(resultSet.getInt("id"));
 				listaEdicaos.add(edicao);
 			}
 			return listaEdicaos;
@@ -105,6 +105,7 @@ public class DaoEdicao {
 				edicao.setId(resultSet.getInt("id"));
                 edicao.setAno(resultSet.getInt("ano"));
 				edicao.setNovo_conteudo(resultSet.getString("novo_conteudo"));
+				edicao.getLivro().setId(resultSet.getInt("id"));
 				lista.add(edicao);
 			}
 			return lista;
