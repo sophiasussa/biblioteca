@@ -77,7 +77,8 @@ public class DaoEmpreLivro {
             ResultSet resultSet = preparedStatement1.executeQuery();
             while(resultSet.next()) {
                 empre_livro.setId(resultSet.getInt("id"));
-          //      empre_livro.setData_empre_livro(resultSet.getInt("data_emprestimo"));
+                empre_livro.getLivro().setId(resultSet.getInt("id"));
+                empre_livro.getEmprestimo().setId(resultSet.getInt("id"));
                 lista.add(empre_livro);
             }
             return lista;
@@ -97,7 +98,8 @@ public class DaoEmpreLivro {
 			while(resultSet.next()) {
 				empre_livro = new EmpreLivro();
 				empre_livro.setId(resultSet.getInt("id"));
-			//	empre_livro.setData_empre_livro(resultSet.getInt("data_empre_livro"));
+				empre_livro.getLivro().setId(resultSet.getInt("id"));
+                empre_livro.getEmprestimo().setId(resultSet.getInt("id"));
 				lista.add(empre_livro);
 			}
 			return lista;
