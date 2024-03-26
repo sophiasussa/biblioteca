@@ -86,6 +86,8 @@ public class DaoLivro {
 				livro.setNome_livro(resultSet.getString("nome_livro"));
 				livro.setDescricao(resultSet.getString("descricao"));
 				livro.setAno_publicacao(resultSet.getInt("ano_publicacao"));
+				livro.getAutor().setId(resultSet.getInt("id"));
+				livro.getEditora().setId(resultSet.getInt("id"));
 				listaLivros.add(livro);
 			}
 			return listaLivros;
@@ -108,6 +110,8 @@ public class DaoLivro {
 				livro.setNome_livro(resultSet.getString("nome_livro"));
 				livro.setDescricao(resultSet.getString("descricao"));
 				livro.setAno_publicacao(resultSet.getInt("ano_publicacao"));
+				livro.getAutor().setId(resultSet.getInt("id"));
+				livro.getEditora().setId(resultSet.getInt("id"));
 				lista.add(livro);
 			}
 			return lista;
