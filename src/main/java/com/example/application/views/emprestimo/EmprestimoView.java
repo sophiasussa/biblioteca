@@ -46,15 +46,13 @@ public class EmprestimoView extends Composite<VerticalLayout> {
         VerticalLayout layoutColumn3 = new VerticalLayout();
         FormLayout formLayout2Col = new FormLayout();
         NumberField numberField = new NumberField();
-        DatePicker datePicker = new DatePicker();
+        TextField txtData = new TextField();
         HorizontalLayout layoutRow = new HorizontalLayout();
         Button buttonPrimary = new Button();
         Button buttonSecondary = new Button();
         Button buttonTertiary = new Button();
         H4 h4 = new H4();
         FormLayout formLayout3Col = new FormLayout();
-        NumberField numberField2 = new NumberField();
-        ComboBox comboBox = new ComboBox();
         ComboBox comboBox2 = new ComboBox();
         HorizontalLayout layoutRow2 = new HorizontalLayout();
         Button buttonPrimary2 = new Button();
@@ -80,8 +78,8 @@ public class EmprestimoView extends Composite<VerticalLayout> {
         formLayout2Col.setWidth("100%");
         numberField.setLabel("ID");
         numberField.setWidth("min-content");
-        datePicker.setLabel("Data do Empréstimo");
-        datePicker.setWidth("min-content");
+        txtData.setLabel("Data do Empréstimo");
+        txtData.setWidth("min-content");
         layoutRow.setWidthFull();
         layoutColumn3.setFlexGrow(1.0, layoutRow);
         layoutRow.addClassName(Gap.MEDIUM);
@@ -102,11 +100,6 @@ public class EmprestimoView extends Composite<VerticalLayout> {
         formLayout3Col.setWidth("100%");
         formLayout3Col.setResponsiveSteps(new ResponsiveStep("0", 1), new ResponsiveStep("250px", 2),
                 new ResponsiveStep("500px", 3));
-        numberField2.setLabel("ID");
-        numberField2.setWidth("min-content");
-        comboBox.setLabel("Empréstimo");
-        comboBox.setWidth("min-content");
-        setComboBoxSampleData(comboBox);
         comboBox2.setLabel("Livro");
         comboBox2.setWidth("min-content");
         setComboBoxSampleData(comboBox2);
@@ -116,7 +109,7 @@ public class EmprestimoView extends Composite<VerticalLayout> {
         layoutRow2.setWidth("100%");
         layoutRow2.getStyle().set("flex-grow", "1");
         layoutRow2.setAlignItems(Alignment.CENTER);
-        layoutRow2.setJustifyContentMode(JustifyContentMode.END);
+        layoutRow2.setJustifyContentMode(JustifyContentMode.START);
         buttonPrimary2.setText("Cadastrar");
         buttonPrimary2.setWidth("min-content");
         buttonPrimary2.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
@@ -132,7 +125,7 @@ public class EmprestimoView extends Composite<VerticalLayout> {
         layoutRow3.getStyle().set("flex-grow", "1");
         layoutRow3.setAlignItems(Alignment.START);
         layoutRow3.setJustifyContentMode(JustifyContentMode.END);
-        textField.setLabel("Text field");
+        textField.setLabel("");
         textField.setWidth("min-content");
         buttonSecondary3.setText("Pesquisar");
         layoutRow3.setAlignSelf(FlexComponent.Alignment.END, buttonSecondary3);
@@ -146,15 +139,13 @@ public class EmprestimoView extends Composite<VerticalLayout> {
         layoutColumn2.add(layoutColumn3);
         layoutColumn3.add(formLayout2Col);
         formLayout2Col.add(numberField);
-        formLayout2Col.add(datePicker);
+        formLayout2Col.add(txtData);
         layoutColumn3.add(layoutRow);
         layoutRow.add(buttonPrimary);
         layoutRow.add(buttonSecondary);
         layoutRow.add(buttonTertiary);
         layoutColumn3.add(h4);
         layoutColumn3.add(formLayout3Col);
-        formLayout3Col.add(numberField2);
-        formLayout3Col.add(comboBox);
         formLayout3Col.add(comboBox2);
         layoutColumn3.add(layoutRow2);
         layoutRow2.add(buttonPrimary2);
