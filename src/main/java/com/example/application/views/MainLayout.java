@@ -58,7 +58,7 @@ public class MainLayout extends AppLayout {
         nav.addItem(new SideNavItem("Livro", LivroView.class, VaadinIcon.OPEN_BOOK.create()));
         nav.addItem(new SideNavItem("Editora", EditoraView.class, VaadinIcon.WORKPLACE.create()));
         nav.addItem(new SideNavItem("Autor", AutorView.class, VaadinIcon.CLIPBOARD_USER.create()));
-        
+
         return nav;
     }
 

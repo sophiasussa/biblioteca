@@ -62,6 +62,7 @@ public class EmprestimoView extends Composite<VerticalLayout> {
         HorizontalLayout layoutRow3 = new HorizontalLayout();
         TextField textField = new TextField();
         Button buttonSecondary3 = new Button();
+        Button buttonSecondary4 = new Button();
         Grid basicGrid = new Grid(SamplePerson.class);
         getContent().setWidth("100%");
         getContent().getStyle().set("flex-grow", "1");
@@ -124,13 +125,19 @@ public class EmprestimoView extends Composite<VerticalLayout> {
         layoutRow3.setWidth("100%");
         layoutRow3.getStyle().set("flex-grow", "1");
         layoutRow3.setAlignItems(Alignment.START);
-        layoutRow3.setJustifyContentMode(JustifyContentMode.END);
+        layoutRow3.setJustifyContentMode(JustifyContentMode.END); 
+        
         textField.setLabel("");
         textField.setPrefixComponent(new Icon("lumo", "search"));
         textField.setWidth("min-content");
-        buttonSecondary3.setText("Pesquisar");
-        layoutRow3.setAlignSelf(FlexComponent.Alignment.END, buttonSecondary3);
+        buttonSecondary3.setText("Pesquisar Emprestimo");
         buttonSecondary3.setWidth("min-content");
+        buttonSecondary4.setText("Pesquisar EmpreLivro");
+        buttonSecondary4.setWidth("min-content");
+
+        layoutRow3.add(textField, buttonSecondary3, buttonSecondary4);
+        
+        layoutRow3.setAlignItems(FlexComponent.Alignment.END);
         basicGrid.setWidth("100%");
         basicGrid.getStyle().set("flex-grow", "0");
         setGridSampleData(basicGrid);
