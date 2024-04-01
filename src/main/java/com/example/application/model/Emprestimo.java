@@ -16,5 +16,9 @@ public class Emprestimo {
     public void setData_emprestimo(int data_emprestimo) {
         this.data_emprestimo = data_emprestimo;
     }
+    public Emprestimo getLivro() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getLivro'");
+    }
     
 }

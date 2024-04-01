@@ -85,10 +85,11 @@ public class AutorView extends Composite<VerticalLayout> {
         layoutColumn3.setFlexGrow(1.0, layoutRow2);
         layoutRow2.addClassName(Gap.MEDIUM);
         layoutRow2.setWidth("100%");
-        layoutRow2.setHeight("80px");
+        layoutRow2.setHeight("50px");
         layoutRow2.setAlignItems(Alignment.END);
         layoutRow2.setJustifyContentMode(JustifyContentMode.END);
-        textField2.setLabel("Pesquisar Autor");
+        textField2.setLabel("");
+        textField2.setPrefixComponent(new Icon("lumo", "search"));
         textField2.setWidth("min-content");
         buttonSecondary2.setText("Pesquisar");
         layoutRow2.setAlignSelf(FlexComponent.Alignment.END, buttonSecondary2);

@@ -10,6 +10,7 @@ import com.vaadin.flow.component.html.Footer;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Header;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.Scroller;
 import com.vaadin.flow.component.sidenav.SideNav;
 import com.vaadin.flow.component.sidenav.SideNavItem;
@@ -41,7 +42,7 @@ public class MainLayout extends AppLayout {
     }
 
     private void addDrawerContent() {
-        H1 appName = new H1("My App");
+        H1 appName = new H1("Livraria");
         appName.addClassNames(LumoUtility.FontSize.LARGE, LumoUtility.Margin.NONE);
         Header header = new Header(appName);
 
@@ -53,11 +54,11 @@ public class MainLayout extends AppLayout {
     private SideNav createNavigation() {
         SideNav nav = new SideNav();
 
-        nav.addItem(new SideNavItem("Emprestimo", EmprestimoView.class, LineAwesomeIcon.PENCIL_RULER_SOLID.create()));
-        nav.addItem(new SideNavItem("Editora", EditoraView.class, LineAwesomeIcon.PENCIL_RULER_SOLID.create()));
-        nav.addItem(new SideNavItem("Autor", AutorView.class, LineAwesomeIcon.PENCIL_RULER_SOLID.create()));
-        nav.addItem(new SideNavItem("Livro", LivroView.class, LineAwesomeIcon.PENCIL_RULER_SOLID.create()));
-
+        nav.addItem(new SideNavItem("Emprestimo", EmprestimoView.class, VaadinIcon.RECORDS.create()));
+        nav.addItem(new SideNavItem("Livro", LivroView.class, VaadinIcon.OPEN_BOOK.create()));
+        nav.addItem(new SideNavItem("Editora", EditoraView.class, VaadinIcon.WORKPLACE.create()));
+        nav.addItem(new SideNavItem("Autor", AutorView.class, VaadinIcon.CLIPBOARD_USER.create()));
+        
         return nav;
     }
 
