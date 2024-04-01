@@ -126,6 +126,7 @@ public class EmprestimoView extends Composite<VerticalLayout> {
         layoutRow3.setAlignItems(Alignment.START);
         layoutRow3.setJustifyContentMode(JustifyContentMode.END);
         textField.setLabel("");
+        textField.setPrefixComponent(new Icon("lumo", "search"));
         textField.setWidth("min-content");
         buttonSecondary3.setText("Pesquisar");
         layoutRow3.setAlignSelf(FlexComponent.Alignment.END, buttonSecondary3);
