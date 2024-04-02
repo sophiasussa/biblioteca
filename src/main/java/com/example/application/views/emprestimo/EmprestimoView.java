@@ -8,6 +8,7 @@ import com.example.application.controller.ControllerEmpreLivro;
 import com.example.application.model.Livro;
 import com.example.application.model.Emprestimo;
 import com.example.application.model.Autor;
+import com.example.application.model.Edicao;
 import com.example.application.model.Editora;
 import com.example.application.model.EmpreLivro;
 import com.example.application.services.SamplePersonService;
@@ -257,9 +258,48 @@ public class EmprestimoView extends Composite<VerticalLayout> {
 
         });
 
-
         buttonSecondary2.setText("Alterar");
         buttonSecondary2.setWidth("min-content");
+
+      /*   buttonSecondary.addClickListener(event -> {
+            int id = (int) Math.round(numberField.getValue());
+
+            if (id > 0) {
+            //    EmpreLivro empreLivro = controller2.pesquisar(id);
+        
+                if (empreLivro != null) {
+                    empreLivro.setLivro(textField.getValue());
+        
+                    if (controller.alterar(autor)) {
+                        Notification notification = new Notification(
+                                "Autor alterado com sucesso.", 3000);
+                        notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+                        notification.setPosition(Notification.Position.MIDDLE);
+                        notification.open();
+                    } else {
+                        Notification notification = new Notification(
+                                "Erro ao alterar. Verifique se todos os dados foram preenchidos.", 3000);
+                        notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
+                        notification.setPosition(Notification.Position.MIDDLE);
+                        notification.open();
+                    }
+                } else {
+                    Notification notification = new Notification(
+                            "Autor com o ID fornecido não encontrado.", 3000);
+                    notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
+                    notification.setPosition(Notification.Position.MIDDLE);
+                    notification.open();
+                }
+            } else {
+                Notification notification = new Notification(
+                        "ID inválido. Por favor, insira um ID válido.", 3000);
+                notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
+                notification.setPosition(Notification.Position.MIDDLE);
+                notification.open();
+            }     
+        });*/
+
+
         buttonTertiary2.setText("Deletar");
         buttonTertiary2.setWidth("min-content");
         buttonTertiary2.addThemeVariants(ButtonVariant.LUMO_TERTIARY);

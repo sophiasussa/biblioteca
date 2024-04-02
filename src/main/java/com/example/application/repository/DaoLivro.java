@@ -7,12 +7,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.example.application.model.Livro;
+import com.example.application.model.Autor;
+import com.example.application.model.Editora;
 
 public class DaoLivro {
 	public boolean inserir(Livro livro) {
 		try {
 			Connection connection = DBConnection.getInstance().getConnection();
-			String insert = "INSERT INTO livro (nome_livro, descricao, ano_publicacao, autor, editora) values" +  "(?, ?, ?, ?, ?)";
+			String insert = "INSERT INTO livro (nome_livro, descricao, ano_publicacao, id_autor, id_editora) values"
+					+ "(?, ?, ?, ?, ?)";
 			PreparedStatement preparedStatement1 = connection.prepareStatement(insert);
 			preparedStatement1.setString(1, livro.getNome_livro());
 			preparedStatement1.setString(2, livro.getDescricao());
@@ -20,23 +23,19 @@ public class DaoLivro {
 			preparedStatement1.setInt(4, livro.getAutor().getId());
 			preparedStatement1.setInt(5, livro.getEditora().getId());
 			int resultado = preparedStatement1.executeUpdate();
-			if(resultado>0) {
-				ResultSet generatedKeys = preparedStatement1.getGeneratedKeys(); 
-				if (generatedKeys.next()) {
-					livro.setId(generatedKeys.getInt(1)); 
-				}
+			if (resultado > 0) {
 				return true;
-			}else {
+			} else {
 				return false;
 			}
-			
-		}catch (Exception e) {
+
+		} catch (Exception e) {
 			System.out.println(e.getMessage());
 			return false;
 		}
 	}
 
-    public boolean alterar(Livro livro) {
+	public boolean alterar(Livro livro) {
 		try {
 			Connection connection = DBConnection.getInstance().getConnection();
 			String update = "UPDATE livro set nome_livro = ?, descricao = ?, ano_publicacao  = ? where id = ?";
@@ -46,36 +45,36 @@ public class DaoLivro {
 			preparedStatement1.setString(2, livro.getDescricao());
 			preparedStatement1.setInt(3, livro.getAno_publicacao());
 			int resultado = preparedStatement1.executeUpdate();
-			if(resultado>0) {
+			if (resultado > 0) {
 				return true;
-			}else {
+			} else {
 				return false;
 			}
-			
-		}catch (Exception e) {
+
+		} catch (Exception e) {
 			return false;
 		}
 	}
 
-    public boolean excluir(Livro livro) {
+	public boolean excluir(Livro livro) {
 		try {
 			Connection connection = DBConnection.getInstance().getConnection();
 			String delete = "DELETE from livro where id = ?";
 			PreparedStatement preparedStatement1 = connection.prepareStatement(delete);
 			preparedStatement1.setInt(1, livro.getId());
 			int resultado = preparedStatement1.executeUpdate();
-			if(resultado>0) {
+			if (resultado > 0) {
 				return true;
-			}else {
+			} else {
 				return false;
 			}
-			
-		}catch (Exception e) {
+
+		} catch (Exception e) {
 			return false;
 		}
 	}
 
-    public Livro pesquisar(int id) {
+	public Livro pesquisar(int id) {
 		try {
 			Connection connection = DBConnection.getInstance().getConnection();
 			String consulta = "SELECT * from livro where id = ?";
@@ -83,20 +82,22 @@ public class DaoLivro {
 			PreparedStatement preparedStatement = connection.prepareStatement(consulta);
 			preparedStatement.setInt(1, id);
 			ResultSet resultSet = preparedStatement.executeQuery();
-			while(resultSet.next()) {
+			while (resultSet.next()) {
 				livro.setId(resultSet.getInt("id"));
 				livro.setNome_livro(resultSet.getString("nome_livro"));
 				livro.setDescricao(resultSet.getString("descricao"));
 				livro.setAno_publicacao(resultSet.getInt("ano_publicacao"));
-				livro.getAutor().setId(resultSet.getInt("id"));
-				livro.getEditora().setId(resultSet.getInt("id"));
+				Autor autor = new DaoAutor().pesquisar(resultSet.getInt("id_autor"));
+				Editora editora = new DaoEditora().pesquisar(resultSet.getInt("id_editora"));
+				livro.setAutor(autor);
+				livro.setEditora(editora);
 			}
 			return livro;
-		}catch (Exception e) {
+		} catch (Exception e) {
 			return null;
 		}
 	}
-	
+
 	public List<Livro> pesquisarTodos() {
 		try {
 			Connection connection = DBConnection.getInstance().getConnection();
@@ -105,21 +106,22 @@ public class DaoLivro {
 			Livro livro;
 			PreparedStatement preparedStatement = connection.prepareStatement(consulta);
 			ResultSet resultSet = preparedStatement.executeQuery();
-			while(resultSet.next()) {
+			while (resultSet.next()) {
 				livro = new Livro();
 				livro.setId(resultSet.getInt("id"));
 				livro.setNome_livro(resultSet.getString("nome_livro"));
 				livro.setDescricao(resultSet.getString("descricao"));
 				livro.setAno_publicacao(resultSet.getInt("ano_publicacao"));
-				livro.getAutor().setId(resultSet.getInt("id"));
-				livro.getEditora().setId(resultSet.getInt("id"));
+				Autor autor = new DaoAutor().pesquisar(resultSet.getInt("id_autor"));
+				Editora editora = new DaoEditora().pesquisar(resultSet.getInt("id_editora"));
+				livro.setAutor(autor);
+				livro.setEditora(editora);
 				lista.add(livro);
 			}
 			return lista;
-		}catch (Exception e) {
+		} catch (Exception e) {
 			return null;
 		}
 	}
-
 
 }

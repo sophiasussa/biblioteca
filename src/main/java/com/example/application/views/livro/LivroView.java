@@ -149,7 +149,7 @@ public class LivroView extends Composite<VerticalLayout> {
             livro.setAno_publicacao(Integer.parseInt(txtData.getValue()));
             Autor autorSelecionado = comboBox.getValue();
             Editora editoraSelecionado = comboBox2.getValue();
-        
+
             if (autorSelecionado != null && editoraSelecionado != null) {
                 livro.setAutor(autorSelecionado);
                 livro.setEditora(editoraSelecionado);
@@ -183,14 +183,14 @@ public class LivroView extends Composite<VerticalLayout> {
 
             if (id > 0) {
                 Livro livro = controller2.pesquisar(id);
-        
+
                 if (livro != null) {
                     livro.setNome_livro(textField.getValue());
                     livro.setDescricao(textArea.getValue());
                     livro.setAno_publicacao(Integer.parseInt(txtData.getValue()));
                     Autor autorSelecionado = comboBox.getValue();
                     Editora editoraSelecionado = comboBox2.getValue();
-                
+
                     if (autorSelecionado != null) {
                         livro.setAutor(autorSelecionado);
                     } else {
@@ -201,7 +201,7 @@ public class LivroView extends Composite<VerticalLayout> {
                         notification.open();
                         return;
                     }
-        
+
                     if (editoraSelecionado != null) {
                         livro.setEditora(editoraSelecionado);
                     } else {
@@ -212,7 +212,7 @@ public class LivroView extends Composite<VerticalLayout> {
                         notification.open();
                         return;
                     }
-        
+
                     if (controller2.alterar(livro)) {
                         Notification notification = new Notification(
                                 "Livro alterado com sucesso.", 3000);
@@ -239,9 +239,8 @@ public class LivroView extends Composite<VerticalLayout> {
                 notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
                 notification.setPosition(Notification.Position.MIDDLE);
                 notification.open();
-            }     
+            }
         });
-
 
         buttonTertiary.setText("Deletar");
         buttonTertiary.setWidth("min-content");
@@ -252,7 +251,7 @@ public class LivroView extends Composite<VerticalLayout> {
 
             if (id > 0) {
                 Livro livro = controller2.pesquisar(id);
-        
+
                 if (livro != null) {
                     if (controller2.excluir(livro)) {
                         Notification notification = new Notification(
@@ -280,10 +279,8 @@ public class LivroView extends Composite<VerticalLayout> {
                 notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
                 notification.setPosition(Notification.Position.MIDDLE);
                 notification.open();
-            }     
+            }
         });
-
-
 
         h4.setText("Adicionar Edição");
         h4.setWidth("max-content");
@@ -298,7 +295,7 @@ public class LivroView extends Composite<VerticalLayout> {
         textArea2.setWidth("100%");
         comboBox3.setLabel("Livro");
         comboBox3.setWidth("min-content");
-  
+
         layoutRow3.setWidthFull();
         layoutColumn4.setFlexGrow(1.0, layoutRow3);
         layoutRow3.addClassName(Gap.MEDIUM);
@@ -311,11 +308,11 @@ public class LivroView extends Composite<VerticalLayout> {
         buttonPrimary2.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
 
         buttonPrimary2.addClickListener(event -> {
-        Edicao edicao = new Edicao();
-        edicao.setAno(Integer.parseInt(txtData2.getValue()));
-        edicao.setNovo_conteudo(textArea2.getValue());
-        Livro livroSelecionado = comboBox3.getValue();
-        
+            Edicao edicao = new Edicao();
+            edicao.setAno(Integer.parseInt(txtData2.getValue()));
+            edicao.setNovo_conteudo(textArea2.getValue());
+            Livro livroSelecionado = comboBox3.getValue();
+
             if (livroSelecionado != null) {
                 edicao.setLivro(livroSelecionado);
             } else {
@@ -344,17 +341,17 @@ public class LivroView extends Composite<VerticalLayout> {
 
         buttonSecondary2.setText("Alterar");
         buttonSecondary2.setWidth("min-content");
-        
+
         buttonSecondary2.addClickListener(event -> {
             int id = (int) Math.round(numberField2.getValue());
 
             if (id > 0) {
                 Edicao edicao = controller.pesquisar(id);
-        
+
                 if (edicao != null) {
                     edicao.setAno(Integer.parseInt(txtData2.getValue()));
                     edicao.setNovo_conteudo(textArea2.getValue());
-        
+
                     if (controller.alterar(edicao)) {
                         Notification notification = new Notification(
                                 "Edicao alterado com sucesso.", 3000);
@@ -381,7 +378,7 @@ public class LivroView extends Composite<VerticalLayout> {
                 notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
                 notification.setPosition(Notification.Position.MIDDLE);
                 notification.open();
-            }     
+            }
         });
 
         buttonTertiary2.setText("Deletar");
@@ -393,7 +390,7 @@ public class LivroView extends Composite<VerticalLayout> {
 
             if (id > 0) {
                 Edicao edicao = controller.pesquisar(id);
-        
+
                 if (edicao != null) {
                     if (controller.excluir(edicao)) {
                         Notification notification = new Notification(
@@ -421,7 +418,7 @@ public class LivroView extends Composite<VerticalLayout> {
                 notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
                 notification.setPosition(Notification.Position.MIDDLE);
                 notification.open();
-            }     
+            }
         });
         layoutRow4.setWidthFull();
         layoutColumn3.setFlexGrow(1.0, layoutRow4);
@@ -441,8 +438,8 @@ public class LivroView extends Composite<VerticalLayout> {
             if (textField2.isEmpty()) {
                 List<Livro> livro = controller2.pesquisarTodos();
                 addGridToConsultaTab(livro);
-            }else{
-                try{
+            } else {
+                try {
                     int id = (int) Math.round(Double.parseDouble(textField2.getValue()));
                     Livro livro = controller2.pesquisar(id);
                     if (livro != null) {
@@ -456,7 +453,7 @@ public class LivroView extends Composite<VerticalLayout> {
                         notification.setPosition(Notification.Position.MIDDLE);
                         notification.open();
                     }
-                }catch (NumberFormatException e) {
+                } catch (NumberFormatException e) {
                     Notification notification = new Notification(
                             "ID inválido. Por favor, insira um ID válido.", 3000);
                     notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
@@ -466,7 +463,6 @@ public class LivroView extends Composite<VerticalLayout> {
             }
         });
 
-
         buttonSecondary4.setText("Pesquisar Edição");
         layoutRow4.setAlignSelf(FlexComponent.Alignment.END, buttonSecondary4);
         buttonSecondary4.setWidth("min-content");
@@ -475,8 +471,8 @@ public class LivroView extends Composite<VerticalLayout> {
             if (textField2.isEmpty()) {
                 List<Edicao> edicao = controller.pesquisarTodos();
                 addGridToConsultaTab2(edicao);
-            }else{
-                try{
+            } else {
+                try {
                     int id = (int) Math.round(Double.parseDouble(textField2.getValue()));
                     Edicao edicao = controller.pesquisar(id);
                     if (edicao != null) {
@@ -490,7 +486,7 @@ public class LivroView extends Composite<VerticalLayout> {
                         notification.setPosition(Notification.Position.MIDDLE);
                         notification.open();
                     }
-                }catch (NumberFormatException e) {
+                } catch (NumberFormatException e) {
                     Notification notification = new Notification(
                             "ID inválido. Por favor, insira um ID válido.", 3000);
                     notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
@@ -541,41 +537,62 @@ public class LivroView extends Composite<VerticalLayout> {
         setComboBoxEditoraData(comboBox2);
         setComboBoxData(comboBox3);
     }
-    
+
     private void setComboBoxData(ComboBox<Livro> comboBox3) {
         List<Livro> livros = controller2.pesquisarTodos();
         comboBox3.setItems(livros);
         comboBox3.setItemLabelGenerator(livro -> livro.getNome_livro());
     }
-    
+
     private void setComboBoxAutorData(ComboBox<Autor> comboBox) {
         List<Autor> autores = controller4.pesquisarTodos();
         comboBox.setItems(autores);
         comboBox.setItemLabelGenerator(autor -> autor.getNome_autor());
     }
-    
+
     private void setComboBoxEditoraData(ComboBox<Editora> comboBox2) {
         List<Editora> editoras = controller3.pesquisarTodos();
         comboBox2.setItems(editoras);
         comboBox2.setItemLabelGenerator(editora -> editora.getNome_editora());
-    }   
-
+    }
 
     private void addGridToConsultaTab(List<Livro> livros) {
         if (grid == null) {
             grid = new Grid<>();
             grid.addColumn(Livro::getId).setHeader("ID");
             grid.addColumn(Livro::getNome_livro).setHeader("Nome");
+            grid.addColumn(Livro::getDescricao).setHeader("Descricao");
+            grid.addColumn(Livro::getAno_publicacao).setHeader("Ano de Publicação");
+            grid.addColumn(Livro::getAutor).setHeader("Autor");
+            grid.addColumn(Livro::getEditora).setHeader("Editora");
             grid.setItems(livros);
-    
+
+
+            numberField.setLabel("ID");
+            numberField.setWidth("min-content");
+            textField.setLabel("Nome");
+            textField.setWidth("min-content");
+            txtData.setLabel("Ano de Publicação");
+            txtData.setWidth("min-content");
+            textArea.setLabel("Descrição");
+            textArea.setWidth("100%");
+            comboBox.setLabel("Autor");
+            comboBox.setWidth("min-content");
+            comboBox2.setLabel("Editora");
+            comboBox2.setWidth("min-content");
+
             grid.addItemDoubleClickListener(event -> {
                 Livro livro = event.getItem();
                 if (livro != null) {
                     numberField.setValue(Double.parseDouble(String.valueOf(livro.getId())));
                     textField.setValue(livro.getNome_livro());
+                    textArea.setValue(livro.getDescricao());
+                    txtData.setValue(String.valueOf(livro.getAno_publicacao()));
+                    comboBox.setValue(livro.getAutor());
+                    comboBox2.setValue(livro.getEditora());
                 }
             });
-    
+
             layoutColumn3.add(grid);
         } else {
             grid.setItems(livros);
@@ -588,7 +605,7 @@ public class LivroView extends Composite<VerticalLayout> {
             grid1.addColumn(Edicao::getId).setHeader("ID");
             grid1.addColumn(Edicao::getNovo_conteudo).setHeader("Nome");
             grid1.setItems(edicoes);
-    
+
             grid1.addItemDoubleClickListener(event -> {
                 Edicao edicao = event.getItem();
                 if (edicao != null) {
@@ -596,11 +613,11 @@ public class LivroView extends Composite<VerticalLayout> {
                     textField.setValue(edicao.getNovo_conteudo());
                 }
             });
-    
+
             layoutColumn3.add(grid1);
         } else {
             grid1.setItems(edicoes);
         }
     }
-    
+
 }
