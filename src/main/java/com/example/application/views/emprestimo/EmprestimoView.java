@@ -63,6 +63,7 @@ public class EmprestimoView extends Composite<VerticalLayout> {
         TextField textField = new TextField();
         Button buttonSecondary3 = new Button();
         Grid basicGrid = new Grid(SamplePerson.class);
+        
         getContent().setWidth("100%");
         getContent().getStyle().set("flex-grow", "1");
         layoutColumn2.setWidthFull();

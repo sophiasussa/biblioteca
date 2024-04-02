@@ -16,5 +16,9 @@ public class Autor {
     public void setNome_autor(String nome_autor) {
         this.nome_autor = nome_autor;
     }
+    public void setId(Double value) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setId'");
+    }
     
 }

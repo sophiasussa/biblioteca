@@ -19,7 +19,7 @@ public class ControllerAutor {
 		return dao.excluir(autor);
 	}
 	
-	public List<Autor> pesquisar(int id) {
+	public Autor pesquisar(int id) {
 		return dao.pesquisar(id);
 	}
 	

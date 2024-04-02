@@ -66,21 +66,19 @@ public class DaoAutor {
         }
     }
 
-    public List<Autor> pesquisar(int id) {
+    public Autor pesquisar(int id) {
         try {
             Connection connection = DBConnection.getInstance().getConnection();
             String consulta = "SELECT * from autor where id = ?";
             Autor autor = new Autor();
-            List<Autor> listaAutores = new ArrayList<Autor>();
             PreparedStatement preparedStatement = connection.prepareStatement(consulta);
             preparedStatement.setInt(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 autor.setId(resultSet.getInt("id"));
                 autor.setNome_autor(resultSet.getString("nome_autor"));
-                listaAutores.add(autor);
             }
-            return listaAutores;
+            return autor;
         } catch (Exception e) {
             return null;
         }

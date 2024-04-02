@@ -1,6 +1,8 @@
 package com.example.application.views.autor;
 
+import com.example.application.controller.ControllerAutor;
 import com.example.application.data.SamplePerson;
+import com.example.application.model.Autor;
 import com.example.application.services.SamplePersonService;
 import com.example.application.views.MainLayout;
 import com.vaadin.flow.component.Composite;
@@ -12,17 +14,23 @@ import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.Hr;
 import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment;
 import com.vaadin.flow.component.orderedlayout.FlexComponent.JustifyContentMode;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.component.textfield.NumberField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.data.VaadinSpringDataHelpers;
 import com.vaadin.flow.theme.lumo.LumoUtility.Gap;
+
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 
@@ -30,25 +38,26 @@ import org.springframework.data.domain.PageRequest;
 @Route(value = "autor", layout = MainLayout.class)
 @Uses(Icon.class)
 public class AutorView extends Composite<VerticalLayout> {
+    ControllerAutor controller = new ControllerAutor();
+    NumberField numberField = new NumberField();
+    TextField textField = new TextField();
+    VerticalLayout layoutColumn2 = new VerticalLayout();
+    H3 h3 = new H3();
+    VerticalLayout layoutColumn3 = new VerticalLayout();
+    Hr hr = new Hr();
+    FormLayout formLayout2Col = new FormLayout();
+    HorizontalLayout layoutRow = new HorizontalLayout();
+    Button buttonPrimary = new Button();
+    Button buttonSecondary = new Button();
+    Button buttonTertiary = new Button();
+    Hr hr2 = new Hr();
+    Hr hr3 = new Hr();
+    HorizontalLayout layoutRow2 = new HorizontalLayout();
+    TextField textField2 = new TextField();
+    Button buttonSecondary2 = new Button();
+    Grid<Autor> grid;
 
     public AutorView() {
-        VerticalLayout layoutColumn2 = new VerticalLayout();
-        H3 h3 = new H3();
-        VerticalLayout layoutColumn3 = new VerticalLayout();
-        Hr hr = new Hr();
-        FormLayout formLayout2Col = new FormLayout();
-        NumberField numberField = new NumberField();
-        TextField textField = new TextField();
-        HorizontalLayout layoutRow = new HorizontalLayout();
-        Button buttonPrimary = new Button();
-        Button buttonSecondary = new Button();
-        Button buttonTertiary = new Button();
-        Hr hr2 = new Hr();
-        Hr hr3 = new Hr();
-        HorizontalLayout layoutRow2 = new HorizontalLayout();
-        TextField textField2 = new TextField();
-        Button buttonSecondary2 = new Button();
-        Grid basicGrid = new Grid(SamplePerson.class);
         getContent().setWidth("100%");
         getContent().getStyle().set("flex-grow", "1");
         layoutColumn2.setWidthFull();
@@ -73,14 +82,74 @@ public class AutorView extends Composite<VerticalLayout> {
         layoutRow.setHeight("50px");
         layoutRow.setAlignItems(Alignment.START);
         layoutRow.setJustifyContentMode(JustifyContentMode.END);
-        buttonPrimary.setText("Cadastrar");
+        buttonPrimary.setText("Salvar");
+
+        buttonPrimary.addClickListener(event -> {
+            Autor autor = new Autor();
+            autor.setNome_autor(textField.getValue());
+            if (controller.inserir(autor) == true) {
+                Notification notification = new Notification(
+                        "Autor salvo com sucesso.", 3000);
+                notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+                notification.setPosition(Notification.Position.MIDDLE);
+                notification.open();
+            } else {
+                Notification notification = new Notification(
+                        "Erro ao salvar. Verifique se todos os dados foram preenchidos.", 3000);
+                notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
+                notification.setPosition(Notification.Position.MIDDLE);
+                notification.open();
+            }
+        });
+
         buttonPrimary.setWidth("min-content");
         buttonPrimary.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         buttonSecondary.setText("Alterar");
+
+        buttonSecondary.addClickListener(event -> {
+            int id = (int) Math.round(numberField.getValue());
+
+            if (id > 0) {
+                Autor autor = controller.pesquisar(id);
+        
+                if (autor != null) {
+                    autor.setNome_autor(textField.getValue());
+        
+                    if (controller.alterar(autor)) {
+                        Notification notification = new Notification(
+                                "Autor alterado com sucesso.", 3000);
+                        notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+                        notification.setPosition(Notification.Position.MIDDLE);
+                        notification.open();
+                    } else {
+                        Notification notification = new Notification(
+                                "Erro ao alterar. Verifique se todos os dados foram preenchidos.", 3000);
+                        notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
+                        notification.setPosition(Notification.Position.MIDDLE);
+                        notification.open();
+                    }
+                } else {
+                    Notification notification = new Notification(
+                            "Autor com o ID fornecido não encontrado.", 3000);
+                    notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
+                    notification.setPosition(Notification.Position.MIDDLE);
+                    notification.open();
+                }
+            } else {
+                Notification notification = new Notification(
+                        "ID inválido. Por favor, insira um ID válido.", 3000);
+                notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
+                notification.setPosition(Notification.Position.MIDDLE);
+                notification.open();
+            }     
+    });
+    
+
         buttonSecondary.setWidth("min-content");
         buttonTertiary.setText("Deletar");
         buttonTertiary.setWidth("min-content");
         buttonTertiary.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
+
         layoutRow2.setWidthFull();
         layoutColumn3.setFlexGrow(1.0, layoutRow2);
         layoutRow2.addClassName(Gap.MEDIUM);
@@ -88,15 +157,14 @@ public class AutorView extends Composite<VerticalLayout> {
         layoutRow2.setHeight("50px");
         layoutRow2.setAlignItems(Alignment.END);
         layoutRow2.setJustifyContentMode(JustifyContentMode.END);
+
         textField2.setLabel("");
         textField2.setPrefixComponent(new Icon("lumo", "search"));
         textField2.setWidth("min-content");
         buttonSecondary2.setText("Pesquisar");
+
         layoutRow2.setAlignSelf(FlexComponent.Alignment.END, buttonSecondary2);
         buttonSecondary2.setWidth("min-content");
-        basicGrid.setWidth("100%");
-        basicGrid.getStyle().set("flex-grow", "0");
-        setGridSampleData(basicGrid);
         getContent().add(layoutColumn2);
         layoutColumn2.add(h3);
         layoutColumn2.add(layoutColumn3);
@@ -113,15 +181,26 @@ public class AutorView extends Composite<VerticalLayout> {
         layoutColumn3.add(layoutRow2);
         layoutRow2.add(textField2);
         layoutRow2.add(buttonSecondary2);
-        layoutColumn3.add(basicGrid);
+        addGridToConsultaTab(layoutColumn3);
     }
 
-    private void setGridSampleData(Grid grid) {
-        grid.setItems(query -> samplePersonService.list(
-                PageRequest.of(query.getPage(), query.getPageSize(), VaadinSpringDataHelpers.toSpringDataSort(query)))
-                .stream());
-    }
+        private void addGridToConsultaTab(VerticalLayout componentesTela) {
+            if (grid == null) {
+                grid = new Grid<>();
+                grid.addColumn(Autor::getId).setHeader("ID");
+                grid.addColumn(Autor::getNome_autor).setHeader("Nome");
 
-    @Autowired()
-    private SamplePersonService samplePersonService;
+                List<Autor> autores = controller.pesquisarTodos();
+                grid.setItems(autores);
+
+                grid.addItemDoubleClickListener(event -> {
+                    Autor autor = event.getItem();
+                    if (autor != null) {
+                        numberField.setValue(Double.parseDouble(String.valueOf(autor.getId())));
+                        textField.setValue(autor.getNome_autor());
+                    }
+                });
+            }
+            layoutColumn3.add(grid);
+    }
 }
