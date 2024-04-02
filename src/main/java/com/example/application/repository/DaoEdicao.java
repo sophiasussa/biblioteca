@@ -70,12 +70,11 @@ public class DaoEdicao {
 		}
 	}
 
-    public List<Edicao> pesquisar(int id) {
+    public Edicao pesquisar(int id) {
 		try {
 			Connection connection = DBConnection.getInstance().getConnection();
 			String consulta = "SELECT * from edicao where id = ?";
 			Edicao edicao = new Edicao();
-			List<Edicao> listaEdicaos = new ArrayList<Edicao>();
 			PreparedStatement preparedStatement = connection.prepareStatement(consulta);
 			preparedStatement.setInt(1, id);
 			ResultSet resultSet = preparedStatement.executeQuery();
@@ -84,9 +83,8 @@ public class DaoEdicao {
                 edicao.setAno(resultSet.getInt("ano"));
 				edicao.setNovo_conteudo(resultSet.getString("novo_conteudo"));
 				edicao.getLivro().setId(resultSet.getInt("id"));
-				listaEdicaos.add(edicao);
 			}
-			return listaEdicaos;
+			return edicao;
 		}catch (Exception e) {
 			return null;
 		}

@@ -19,7 +19,7 @@ public class ControllerEdicao {
 		return dao.excluir(edicao);
 	}
 	
-	public List<Edicao> pesquisar(int id) {
+	public Edicao pesquisar(int id) {
 		return dao.pesquisar(id);
 	}
 	

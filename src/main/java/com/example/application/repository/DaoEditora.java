@@ -76,7 +76,7 @@ public class DaoEditora {
 			ResultSet resultSet = preparedStatement.executeQuery();
 			while(resultSet.next()) {
 				editora.setId(resultSet.getInt("id"));
-				editora.setNome_editora(resultSet.getString("data_editora"));
+				editora.setNome_editora(resultSet.getString("nome_editora"));
 			}
 			return editora;
 		}catch (Exception e) {
