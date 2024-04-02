@@ -150,41 +150,29 @@ public class LivroView extends Composite<VerticalLayout> {
             Autor autorSelecionado = comboBox.getValue();
             Editora editoraSelecionado = comboBox2.getValue();
         
-            if (autorSelecionado != null) {
+            if (autorSelecionado != null && editoraSelecionado != null) {
                 livro.setAutor(autorSelecionado);
-            } else {
-                Notification notification = new Notification(
-                        "Por favor, selecione um autor.", 3000);
-                notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
-                notification.setPosition(Notification.Position.MIDDLE);
-                notification.open();
-                return;
-            }
-
-            if (editoraSelecionado != null) {
                 livro.setEditora(editoraSelecionado);
+                if (controller2.inserir(livro) == true) {
+                    Notification notification = new Notification(
+                            "Livro salvo com sucesso.", 3000);
+                    notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+                    notification.setPosition(Notification.Position.MIDDLE);
+                    notification.open();
+                } else {
+                    Notification notification = new Notification(
+                            "Erro ao salvar. Verifique se todos os dados foram preenchidos.", 3000);
+                    notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
+                    notification.setPosition(Notification.Position.MIDDLE);
+                    notification.open();
+                }
             } else {
                 Notification notification = new Notification(
-                        "Por favor, selecione uma editora.", 3000);
+                        "Por favor, selecione um autor ou editora.", 3000);
                 notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
                 notification.setPosition(Notification.Position.MIDDLE);
                 notification.open();
                 return;
-            }
-
-
-            if (controller2.inserir(livro) == true) {
-                Notification notification = new Notification(
-                        "Livro salvo com sucesso.", 3000);
-                notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
-                notification.setPosition(Notification.Position.MIDDLE);
-                notification.open();
-            } else {
-                Notification notification = new Notification(
-                        "Erro ao salvar. Verifique se todos os dados foram preenchidos.", 3000);
-                notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
-                notification.setPosition(Notification.Position.MIDDLE);
-                notification.open();
             }
         });
         buttonSecondary.setText("Alterar");
@@ -450,7 +438,7 @@ public class LivroView extends Composite<VerticalLayout> {
         buttonSecondary3.setWidth("min-content");
 
         buttonSecondary3.addClickListener(event -> {
-            if (textField.isEmpty()) {
+            if (textField2.isEmpty()) {
                 List<Livro> livro = controller2.pesquisarTodos();
                 addGridToConsultaTab(livro);
             }else{

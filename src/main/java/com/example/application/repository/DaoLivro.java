@@ -21,6 +21,10 @@ public class DaoLivro {
 			preparedStatement1.setInt(5, livro.getEditora().getId());
 			int resultado = preparedStatement1.executeUpdate();
 			if(resultado>0) {
+				ResultSet generatedKeys = preparedStatement1.getGeneratedKeys(); 
+				if (generatedKeys.next()) {
+					livro.setId(generatedKeys.getInt(1)); 
+				}
 				return true;
 			}else {
 				return false;
