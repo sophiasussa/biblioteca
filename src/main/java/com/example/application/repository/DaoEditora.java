@@ -66,21 +66,19 @@ public class DaoEditora {
 		}
 	}
 
-    public List<Editora> pesquisar(int id) {
+    public Editora pesquisar(int id) {
 		try {
 			Connection connection = DBConnection.getInstance().getConnection();
 			String consulta = "SELECT * from editora where id = ?";
 			Editora editora = new Editora();
-			List<Editora> listaEditoras = new ArrayList<Editora>();
 			PreparedStatement preparedStatement = connection.prepareStatement(consulta);
 			preparedStatement.setInt(1, id);
 			ResultSet resultSet = preparedStatement.executeQuery();
 			while(resultSet.next()) {
 				editora.setId(resultSet.getInt("id"));
 				editora.setNome_editora(resultSet.getString("data_editora"));
-				listaEditoras.add(editora);
 			}
-			return listaEditoras;
+			return editora;
 		}catch (Exception e) {
 			return null;
 		}
