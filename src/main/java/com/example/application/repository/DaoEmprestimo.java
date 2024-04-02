@@ -66,21 +66,19 @@ public class DaoEmprestimo {
 		}
 	}
 
-    public List<Emprestimo> pesquisar(int id) {
+    public Emprestimo pesquisar(int id) {
 		try {
 			Connection connection = DBConnection.getInstance().getConnection();
 			String consulta = "SELECT * from emprestimo where id = ?";
 			Emprestimo emprestimo = new Emprestimo();
-			List<Emprestimo> listaEmprestimos = new ArrayList<Emprestimo>();
 			PreparedStatement preparedStatement = connection.prepareStatement(consulta);
 			preparedStatement.setInt(1, id);
 			ResultSet resultSet = preparedStatement.executeQuery();
 			while(resultSet.next()) {
 				emprestimo.setId(resultSet.getInt("id"));
 				emprestimo.setData_emprestimo(resultSet.getInt("data_emprestimo"));
-				listaEmprestimos.add(emprestimo);
 			}
-			return listaEmprestimos;
+			return emprestimo;
 		}catch (Exception e) {
 			return null;
 		}

@@ -19,7 +19,7 @@ public class ControllerEmprestimo {
 		return dao.excluir(emprestimo);
 	}
 	
-	public List<Emprestimo> pesquisar(int id) {
+	public Emprestimo pesquisar(int id) {
 		return dao.pesquisar(id);
 	}
 	

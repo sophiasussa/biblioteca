@@ -12,14 +12,13 @@ public class DaoLivro {
 	public boolean inserir(Livro livro) {
 		try {
 			Connection connection = DBConnection.getInstance().getConnection();
-			String insert = "INSERT INTO livro (id, nome_livro, descricao, ano_publicacao, autor, editora) values" +  "(?, ?, ?, ?, ?, ?)";
+			String insert = "INSERT INTO livro (nome_livro, descricao, ano_publicacao, autor, editora) values" +  "(?, ?, ?, ?, ?)";
 			PreparedStatement preparedStatement1 = connection.prepareStatement(insert);
-			preparedStatement1.setInt(1, livro.getId());
-			preparedStatement1.setString(2, livro.getNome_livro());
-			preparedStatement1.setString(3, livro.getDescricao());
-			preparedStatement1.setInt(4, livro.getAno_publicacao());
-			preparedStatement1.setInt(5, livro.getAutor().getId());
-			preparedStatement1.setInt(6, livro.getEditora().getId());
+			preparedStatement1.setString(1, livro.getNome_livro());
+			preparedStatement1.setString(2, livro.getDescricao());
+			preparedStatement1.setInt(3, livro.getAno_publicacao());
+			preparedStatement1.setInt(4, livro.getAutor().getId());
+			preparedStatement1.setInt(5, livro.getEditora().getId());
 			int resultado = preparedStatement1.executeUpdate();
 			if(resultado>0) {
 				return true;
