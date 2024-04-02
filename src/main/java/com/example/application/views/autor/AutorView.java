@@ -29,6 +29,7 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.data.VaadinSpringDataHelpers;
 import com.vaadin.flow.theme.lumo.LumoUtility.Gap;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -142,13 +143,49 @@ public class AutorView extends Composite<VerticalLayout> {
                 notification.setPosition(Notification.Position.MIDDLE);
                 notification.open();
             }     
-    });
+        });
     
 
         buttonSecondary.setWidth("min-content");
         buttonTertiary.setText("Deletar");
         buttonTertiary.setWidth("min-content");
         buttonTertiary.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
+
+        buttonTertiary.addClickListener(event -> {
+            int id = (int) Math.round(numberField.getValue());
+
+            if (id > 0) {
+                Autor autor = controller.pesquisar(id);
+        
+                if (autor != null) {
+                    if (controller.excluir(autor)) {
+                        Notification notification = new Notification(
+                                "Autor deletado com sucesso.", 3000);
+                        notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+                        notification.setPosition(Notification.Position.MIDDLE);
+                        notification.open();
+                    } else {
+                        Notification notification = new Notification(
+                                "Erro ao deletar. Verifique se todos os dados foram preenchidos.", 3000);
+                        notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
+                        notification.setPosition(Notification.Position.MIDDLE);
+                        notification.open();
+                    }
+                } else {
+                    Notification notification = new Notification(
+                            "Autor com o ID fornecido não encontrado.", 3000);
+                    notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
+                    notification.setPosition(Notification.Position.MIDDLE);
+                    notification.open();
+                }
+            } else {
+                Notification notification = new Notification(
+                        "ID inválido. Por favor, insira um ID válido.", 3000);
+                notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
+                notification.setPosition(Notification.Position.MIDDLE);
+                notification.open();
+            }     
+        });
 
         layoutRow2.setWidthFull();
         layoutColumn3.setFlexGrow(1.0, layoutRow2);
@@ -162,6 +199,35 @@ public class AutorView extends Composite<VerticalLayout> {
         textField2.setPrefixComponent(new Icon("lumo", "search"));
         textField2.setWidth("min-content");
         buttonSecondary2.setText("Pesquisar");
+
+        buttonSecondary2.addClickListener(event -> {
+            if (textField2.isEmpty()) {
+                List<Autor> autores = controller.pesquisarTodos();
+                addGridToConsultaTab(autores);
+            }else{
+                try{
+                    int id = (int) Math.round(Double.parseDouble(textField2.getValue()));
+                    Autor autor = controller.pesquisar(id);
+                    if (autor != null) {
+                        List<Autor> autoresEncontrados = new ArrayList<>();
+                        autoresEncontrados.add(autor);
+                        addGridToConsultaTab(autoresEncontrados);
+                    } else {
+                        Notification notification = new Notification(
+                                "Autor com o ID fornecido não encontrado.", 3000);
+                        notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
+                        notification.setPosition(Notification.Position.MIDDLE);
+                        notification.open();
+                    }
+                }catch (NumberFormatException e) {
+                    Notification notification = new Notification(
+                            "ID inválido. Por favor, insira um ID válido.", 3000);
+                    notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
+                    notification.setPosition(Notification.Position.MIDDLE);
+                    notification.open();
+                }
+            }
+        });
 
         layoutRow2.setAlignSelf(FlexComponent.Alignment.END, buttonSecondary2);
         buttonSecondary2.setWidth("min-content");
@@ -181,16 +247,15 @@ public class AutorView extends Composite<VerticalLayout> {
         layoutColumn3.add(layoutRow2);
         layoutRow2.add(textField2);
         layoutRow2.add(buttonSecondary2);
-        addGridToConsultaTab(layoutColumn3);
+      //  addGridToConsultaTab(layoutColumn3);
     }
 
-        private void addGridToConsultaTab(VerticalLayout componentesTela) {
+        private void addGridToConsultaTab(List<Autor> autores) {
             if (grid == null) {
                 grid = new Grid<>();
                 grid.addColumn(Autor::getId).setHeader("ID");
                 grid.addColumn(Autor::getNome_autor).setHeader("Nome");
 
-                List<Autor> autores = controller.pesquisarTodos();
                 grid.setItems(autores);
 
                 grid.addItemDoubleClickListener(event -> {
@@ -200,7 +265,24 @@ public class AutorView extends Composite<VerticalLayout> {
                         textField.setValue(autor.getNome_autor());
                     }
                 });
-            }
+            }else{
+                layoutColumn3.remove(grid);
+                grid = null;
+
+                grid = new Grid<>();
+                grid.addColumn(Autor::getId).setHeader("ID");
+                grid.addColumn(Autor::getNome_autor).setHeader("Nome");
+                grid.setItems(autores);
+        
+                grid.addItemDoubleClickListener(event -> {
+                    Autor autor = event.getItem();
+                    if (autor != null) {
+                        numberField.setValue(Double.parseDouble(String.valueOf(autor.getId())));
+                        textField.setValue(autor.getNome_autor());
+                    }
+                });
+            }    
             layoutColumn3.add(grid);
+        
     }
 }
