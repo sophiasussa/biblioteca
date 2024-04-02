@@ -19,11 +19,12 @@ public class ControllerLivro {
 		return dao.excluir(livro);
 	}
 	
-	public List<Livro> pesquisar(int id) {
+	public Livro pesquisar(int id) {
 		return dao.pesquisar(id);
 	}
 	
 	public List<Livro> pesquisarTodos() {
 		return dao.pesquisarTodos();
 	}
+
 }

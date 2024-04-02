@@ -262,6 +262,5 @@ public class EditoraView extends Composite<VerticalLayout> {
         } else {
             grid.setItems(editoras);
         }
-    
-}
+    }
 }

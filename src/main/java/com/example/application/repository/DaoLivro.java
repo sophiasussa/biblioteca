@@ -72,12 +72,11 @@ public class DaoLivro {
 		}
 	}
 
-    public List<Livro> pesquisar(int id) {
+    public Livro pesquisar(int id) {
 		try {
 			Connection connection = DBConnection.getInstance().getConnection();
 			String consulta = "SELECT * from livro where id = ?";
 			Livro livro = new Livro();
-			List<Livro> listaLivros = new ArrayList<Livro>();
 			PreparedStatement preparedStatement = connection.prepareStatement(consulta);
 			preparedStatement.setInt(1, id);
 			ResultSet resultSet = preparedStatement.executeQuery();
@@ -88,9 +87,8 @@ public class DaoLivro {
 				livro.setAno_publicacao(resultSet.getInt("ano_publicacao"));
 				livro.getAutor().setId(resultSet.getInt("id"));
 				livro.getEditora().setId(resultSet.getInt("id"));
-				listaLivros.add(livro);
 			}
-			return listaLivros;
+			return livro;
 		}catch (Exception e) {
 			return null;
 		}
