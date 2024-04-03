@@ -189,29 +189,9 @@ public class LivroView extends Composite<VerticalLayout> {
                     livro.setDescricao(textArea.getValue());
                     livro.setAno_publicacao(Integer.parseInt(txtData.getValue()));
                     Autor autorSelecionado = comboBox.getValue();
+                    livro.setAutor(autorSelecionado);
                     Editora editoraSelecionado = comboBox2.getValue();
-
-                    if (autorSelecionado != null) {
-                        livro.setAutor(autorSelecionado);
-                    } else {
-                        Notification notification = new Notification(
-                                "Por favor, selecione um autor.", 3000);
-                        notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
-                        notification.setPosition(Notification.Position.MIDDLE);
-                        notification.open();
-                        return;
-                    }
-
-                    if (editoraSelecionado != null) {
-                        livro.setEditora(editoraSelecionado);
-                    } else {
-                        Notification notification = new Notification(
-                                "Por favor, selecione uma editora.", 3000);
-                        notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
-                        notification.setPosition(Notification.Position.MIDDLE);
-                        notification.open();
-                        return;
-                    }
+                    livro.setEditora(editoraSelecionado);
 
                     if (controller2.alterar(livro)) {
                         Notification notification = new Notification(
@@ -563,8 +543,8 @@ public class LivroView extends Composite<VerticalLayout> {
             grid.addColumn(Livro::getNome_livro).setHeader("Nome");
             grid.addColumn(Livro::getDescricao).setHeader("Descricao");
             grid.addColumn(Livro::getAno_publicacao).setHeader("Ano de Publicação");
-            grid.addColumn(livro -> livro.getAutor()).setHeader("Autor");
-            grid.addColumn(livro -> livro.getEditora()).setHeader("Editora");
+            grid.addColumn(livro -> livro.getAutor().getNome_autor()).setHeader("Autor");
+            grid.addColumn(livro -> livro.getEditora().getNome_editora()).setHeader("Editora");
             grid.setItems(livros);
 
             grid.addItemDoubleClickListener(event -> {
@@ -575,12 +555,12 @@ public class LivroView extends Composite<VerticalLayout> {
                     textArea.setValue(livro.getDescricao());
                     txtData.setValue(String.valueOf(livro.getAno_publicacao()));
                     Autor autor = livro.getAutor();
-                    comboBox.setItems(autor); 
-                    comboBox.setValue(autor); 
+                    comboBox.setItems(livro.getAutor()); 
+                    comboBox.setValue(livro.getAutor()); 
             
                     Editora editora = livro.getEditora();
-                    comboBox2.setItems(editora);
-                    comboBox2.setValue(editora); 
+                    comboBox2.setItems(livro.getEditora());
+                    comboBox2.setValue(livro.getEditora()); 
                 }
             });
 
@@ -594,15 +574,20 @@ public class LivroView extends Composite<VerticalLayout> {
         if (grid1 == null) {
             grid1 = new Grid<>();
             grid1.addColumn(Edicao::getId).setHeader("ID");
-            grid1.addColumn(Edicao::getNovo_conteudo).setHeader("Nome");
+            grid1.addColumn(Edicao::getAno).setHeader("Ano");           
+            grid1.addColumn(Edicao::getNovo_conteudo).setHeader("Descrição");   
+            grid1.addColumn(edicao -> edicao.getLivro().getNome_livro()).setHeader("Livro");
+
             grid1.setItems(edicoes);
 
             grid1.addItemDoubleClickListener(event -> {
                 Edicao edicao = event.getItem();
                 if (edicao != null) {
                     numberField2.setValue(Double.parseDouble(String.valueOf(edicao.getId())));
-                    textField2.setValue(edicao.getNovo_conteudo());
+                    textArea2.setValue(edicao.getNovo_conteudo());
                     txtData2.setValue(String.valueOf(edicao.getAno()));
+                    Livro livro = edicao.getLivro();
+                    comboBox3.setItems(edicao.getLivro());
                     comboBox3.setValue(edicao.getLivro());
                 }
             });

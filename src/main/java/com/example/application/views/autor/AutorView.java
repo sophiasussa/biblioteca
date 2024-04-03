@@ -195,7 +195,7 @@ public class AutorView extends Composite<VerticalLayout> {
         layoutRow2.setAlignItems(Alignment.END);
         layoutRow2.setJustifyContentMode(JustifyContentMode.END);
 
-        textField2.setLabel("");
+        textField2.setPlaceholder("Insira um ID");
         textField2.setPrefixComponent(new Icon("lumo", "search"));
         textField2.setWidth("min-content");
         buttonSecondary2.setText("Pesquisar");
