@@ -261,7 +261,7 @@ public class EmprestimoView extends Composite<VerticalLayout> {
         buttonSecondary2.setText("Alterar");
         buttonSecondary2.setWidth("min-content");
 
-      /*   buttonSecondary.addClickListener(event -> {
+/*         buttonSecondary.addClickListener(event -> {
             int id = (int) Math.round(numberField.getValue());
 
             if (id > 0) {
@@ -270,9 +270,9 @@ public class EmprestimoView extends Composite<VerticalLayout> {
                 if (empreLivro != null) {
                     empreLivro.setLivro(textField.getValue());
         
-                    if (controller.alterar(autor)) {
+                    if (controller2.alterar(empreLivro)) {
                         Notification notification = new Notification(
-                                "Autor alterado com sucesso.", 3000);
+                                "EmpreLivro alterado com sucesso.", 3000);
                         notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
                         notification.setPosition(Notification.Position.MIDDLE);
                         notification.open();
@@ -285,7 +285,7 @@ public class EmprestimoView extends Composite<VerticalLayout> {
                     }
                 } else {
                     Notification notification = new Notification(
-                            "Autor com o ID fornecido não encontrado.", 3000);
+                            "EmpreLivro com o ID fornecido não encontrado.", 3000);
                     notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
                     notification.setPosition(Notification.Position.MIDDLE);
                     notification.open();
@@ -297,12 +297,49 @@ public class EmprestimoView extends Composite<VerticalLayout> {
                 notification.setPosition(Notification.Position.MIDDLE);
                 notification.open();
             }     
-        });*/
-
+        });
+*/
 
         buttonTertiary2.setText("Deletar");
         buttonTertiary2.setWidth("min-content");
         buttonTertiary2.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
+
+/*         buttonTertiary2.addClickListener(event -> {
+            int id = (int) Math.round(numberField2.getValue());
+
+            if (id > 0) {
+                EmpreLivro empreLivro = controller2.pesquisar(id);
+
+                if (empreLivro != null) {
+                    if (controller2.excluir(empreLivro)) {
+                        Notification notification = new Notification(
+                                "EmpreLivro deletado com sucesso.", 3000);
+                        notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+                        notification.setPosition(Notification.Position.MIDDLE);
+                        notification.open();
+                    } else {
+                        Notification notification = new Notification(
+                                "EmpreLivro ao deletar. Verifique se todos os dados foram preenchidos.", 3000);
+                        notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
+                        notification.setPosition(Notification.Position.MIDDLE);
+                        notification.open();
+                    }
+                } else {
+                    Notification notification = new Notification(
+                            "EmpreLivro com o ID fornecido não encontrado.", 3000);
+                    notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
+                    notification.setPosition(Notification.Position.MIDDLE);
+                    notification.open();
+                }
+            } else {
+                Notification notification = new Notification(
+                        "ID inválido. Por favor, insira um ID válido.", 3000);
+                notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
+                notification.setPosition(Notification.Position.MIDDLE);
+                notification.open();
+            }
+        });
+*/
         layoutRow3.setWidthFull();
         layoutColumn3.setFlexGrow(1.0, layoutRow3);
         layoutRow3.addClassName(Gap.MEDIUM);
