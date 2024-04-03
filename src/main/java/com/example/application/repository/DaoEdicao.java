@@ -6,13 +6,16 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.example.application.model.Autor;
 import com.example.application.model.Edicao;
+import com.example.application.model.Editora;
+import com.example.application.model.Livro;
 
 public class DaoEdicao {
 	public boolean inserir(Edicao edicao) {
 		try {
 			Connection connection = DBConnection.getInstance().getConnection();
-			String insert = "INSERT INTO edicao (id, ano, novo_conteudo, livro) values" +  "(?, ?, ?, ?)";
+			String insert = "INSERT INTO edicao (id, ano, novo_conteudo, id_livro) values" +  "(?, ?, ?, ?)";
 			PreparedStatement preparedStatement1 = connection.prepareStatement(insert);
 			preparedStatement1.setInt(1, edicao.getId());
             preparedStatement1.setInt(2, edicao.getAno());
@@ -34,7 +37,7 @@ public class DaoEdicao {
     public boolean alterar(Edicao edicao) {
 		try {
 			Connection connection = DBConnection.getInstance().getConnection();
-			String update = "UPDATE edicao set ano = ?, novo_conteudo = ?, autor = ? where id = ?";
+			String update = "UPDATE edicao set ano = ?, novo_conteudo = ?, id_livro = ? where id = ?";
 			PreparedStatement preparedStatement1 = connection.prepareStatement(update);
             preparedStatement1.setInt(1, edicao.getAno());
 			preparedStatement1.setString(2, edicao.getNovo_conteudo());
@@ -83,6 +86,8 @@ public class DaoEdicao {
                 edicao.setAno(resultSet.getInt("ano"));
 				edicao.setNovo_conteudo(resultSet.getString("novo_conteudo"));
 				edicao.getLivro().setId(resultSet.getInt("id"));
+				Livro livro = new DaoLivro().pesquisar(resultSet.getInt("id_autor"));
+				edicao.setLivro(livro);
 			}
 			return edicao;
 		}catch (Exception e) {
@@ -104,6 +109,7 @@ public class DaoEdicao {
                 edicao.setAno(resultSet.getInt("ano"));
 				edicao.setNovo_conteudo(resultSet.getString("novo_conteudo"));
 				edicao.getLivro().setId(resultSet.getInt("id"));
+				Livro livro = new DaoLivro().pesquisar(resultSet.getInt("id_autor"));
 				lista.add(edicao);
 			}
 			return lista;
