@@ -169,7 +169,6 @@ public class AutorView extends Composite<VerticalLayout> {
         layoutColumn3.add(layoutRow2);
         layoutRow2.add(textField2);
         layoutRow2.add(buttonSecondary2);
-      //  addGridToConsultaTab(layoutColumn3);
     }
 
     private void addGridToConsultaTab(List<Autor> autores) {
@@ -210,6 +209,7 @@ public class AutorView extends Composite<VerticalLayout> {
             autor.setNome_autor(nomeField.getValue());
             if (controller.alterar(autor)) {
                 Notification.show("Autor alterado com sucesso.").addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+                addGridToConsultaTab(controller.pesquisarTodos());
             } else {
                 Notification.show("Erro ao alterar. Verifique se todos os dados foram preenchidos.")
                         .addThemeVariants(NotificationVariant.LUMO_ERROR);
@@ -253,6 +253,7 @@ public class AutorView extends Composite<VerticalLayout> {
         Button confirmarButton = new Button("Confirmar", event -> {
             if (controller.excluir(autorParaExcluir)) {
                 Notification.show("Autor alterado com sucesso.").addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+                addGridToConsultaTab(controller.pesquisarTodos());
             } else {
                 Notification.show("Erro ao alterar. Verifique se todos os dados foram preenchidos.")
                         .addThemeVariants(NotificationVariant.LUMO_ERROR);
@@ -277,6 +278,5 @@ public class AutorView extends Composite<VerticalLayout> {
             return menuBar;
         }).setHeader("Opções");
     }
-
 }
 
