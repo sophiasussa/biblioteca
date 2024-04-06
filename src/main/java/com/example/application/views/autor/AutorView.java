@@ -252,7 +252,7 @@ public class AutorView extends Composite<VerticalLayout> {
 
         Button confirmarButton = new Button("Confirmar", event -> {
             if (controller.excluir(autorParaExcluir)) {
-                Notification.show("Autor alterado com sucesso.").addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+                Notification.show("Autor excluido com sucesso.").addThemeVariants(NotificationVariant.LUMO_SUCCESS);
                 addGridToConsultaTab(controller.pesquisarTodos());
             } else {
                 Notification.show("Erro ao alterar. Verifique se todos os dados foram preenchidos.")

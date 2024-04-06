@@ -8,12 +8,17 @@ import com.example.application.views.MainLayout;
 import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.contextmenu.MenuItem;
 import com.vaadin.flow.component.dependency.Uses;
+import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.Hr;
+import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.menubar.MenuBar;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
@@ -248,19 +253,105 @@ public class EditoraView extends Composite<VerticalLayout> {
             grid = new Grid<>();
             grid.addColumn(Editora::getId).setHeader("ID");
             grid.addColumn(Editora::getNome_editora).setHeader("Nome");
+    
+            grid.addComponentColumn(editora -> {
+
+                MenuBar menuBar = new MenuBar();
+                
+                MenuItem editarItem = menuBar.addItem(new Icon(VaadinIcon.EDIT), e -> abrirPopupEdicao(editora));
+                MenuItem excluirItem = menuBar.addItem(new Icon(VaadinIcon.TRASH), e -> abrirPopupExclusao(editora));
+                
+                editarItem.getElement().setAttribute("title", "Editar editora");
+                excluirItem.getElement().setAttribute("title", "Excluir editora");
+                
+                return menuBar;
+            }).setHeader("Opções");
+            
             grid.setItems(editoras);
-    
-            grid.addItemDoubleClickListener(event -> {
-                Editora editora = event.getItem();
-                if (editora != null) {
-                    numberField.setValue(Double.parseDouble(String.valueOf(editora.getId())));
-                    textField.setValue(editora.getNome_editora());
-                }
-            });
-    
             layoutColumn3.add(grid);
         } else {
             grid.setItems(editoras);
         }
+    }
+
+    private void abrirPopupEdicao(Editora editora) {
+        Dialog dialog = new Dialog();
+        FormLayout formLayout = new FormLayout();
+        TextField nomeField = new TextField("Nome");
+        nomeField.setValue(editora.getNome_editora());
+        formLayout.add(nomeField);
+
+        Button confirmarButton = new Button("Confirmar", event -> {
+            editora.setNome_editora(nomeField.getValue());
+            if (controller.alterar(editora)) {
+                Notification.show("Editora alterada com sucesso.").addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+                addGridToConsultaTab(controller.pesquisarTodos());
+            } else {
+                Notification.show("Erro ao alterar. Verifique se todos os dados foram preenchidos.")
+                        .addThemeVariants(NotificationVariant.LUMO_ERROR);
+            }
+            dialog.close();
+        });
+        Button cancelarButton = new Button("Cancelar", event -> dialog.close());
+
+        formLayout.add(confirmarButton, cancelarButton);
+        dialog.add(formLayout);
+        dialog.open();
+    }
+
+    private void adicionarIconeEdicao(Grid<Autor> grid, Editora editora) {
+        Icon iconEditar = new Icon(VaadinIcon.EDIT);
+        iconEditar.addClickListener(event -> abrirPopupEdicao(editora));
+
+        grid.addComponentColumn(item -> {
+            MenuBar menuBar = new MenuBar();
+            MenuItem editarItem = menuBar.addItem("Editar", e -> abrirPopupEdicao(editora));
+            editarItem.getElement().setAttribute("title", "Editar editora");
+            return menuBar;
+        }).setHeader("Opções");
+    }
+
+    private void abrirPopupExclusao(Editora editora) {
+        Dialog dialog = new Dialog();
+        FormLayout formLayout = new FormLayout();
+
+        Span mensagem = new Span("Tem certeza que deseja excluir?");
+        formLayout.add(mensagem);
+
+        NumberField idField = new NumberField("ID");
+        idField.setValue((double) editora.getId());
+        idField.setReadOnly(true);
+        formLayout.add(idField);
+
+        int id = (int) Math.round(idField.getValue());
+        final Editora editoraParaExcluir = controller.pesquisar(id);
+
+        Button confirmarButton = new Button("Confirmar", event -> {
+            if (controller.excluir(editoraParaExcluir)) {
+                Notification.show("Editora excluida com sucesso.").addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+                addGridToConsultaTab(controller.pesquisarTodos());
+            } else {
+                Notification.show("Erro ao alterar. Verifique se todos os dados foram preenchidos.")
+                        .addThemeVariants(NotificationVariant.LUMO_ERROR);
+            }
+            dialog.close();
+        });
+        Button cancelarButton = new Button("Cancelar", event -> dialog.close());
+
+        formLayout.add(confirmarButton, cancelarButton);
+        dialog.add(formLayout);
+        dialog.open();
+    }
+
+    private void adicionarIconeExclusao(Grid<Autor> grid, Editora editora) {
+        Icon iconEditar = new Icon(VaadinIcon.EDIT);
+        iconEditar.addClickListener(event -> abrirPopupExclusao(editora));
+
+        grid.addComponentColumn(item -> {
+            MenuBar menuBar = new MenuBar();
+            MenuItem editarItem = menuBar.addItem("Exclusao", e -> abrirPopupExclusao(editora));
+            editarItem.getElement().setAttribute("title", "Excluir autor");
+            return menuBar;
+        }).setHeader("Opções");
     }
 }
