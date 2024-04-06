@@ -49,7 +49,6 @@ import org.springframework.data.domain.PageRequest;
 @Uses(Icon.class)
 public class AutorView extends Composite<VerticalLayout> {
     ControllerAutor controller = new ControllerAutor();
-    NumberField numberField = new NumberField();
     TextField textField = new TextField();
     VerticalLayout layoutColumn2 = new VerticalLayout();
     H3 h3 = new H3();
@@ -81,8 +80,7 @@ public class AutorView extends Composite<VerticalLayout> {
         layoutColumn3.setWidth("100%");
         layoutColumn3.getStyle().set("flex-grow", "1");
         formLayout2Col.setWidth("100%");
-        numberField.setLabel("ID");
-        numberField.setWidth("min-content");
+        textField.setPlaceholder("Insira o nome do Autor");
         textField.setLabel("Nome");
         textField.setWidth("min-content");
         layoutRow.setWidthFull();
@@ -91,9 +89,11 @@ public class AutorView extends Composite<VerticalLayout> {
         layoutRow.setWidth("100%");
         layoutRow.setHeight("50px");
         layoutRow.setAlignItems(Alignment.START);
-        layoutRow.setJustifyContentMode(JustifyContentMode.END);
-        buttonPrimary.setText("Salvar");
+        layoutRow.setJustifyContentMode(JustifyContentMode.START);
 
+        buttonPrimary.setText("Salvar");
+        buttonPrimary.setWidth("min-content");
+        buttonPrimary.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         buttonPrimary.addClickListener(event -> {
             Autor autor = new Autor();
             autor.setNome_autor(textField.getValue());
@@ -110,90 +110,6 @@ public class AutorView extends Composite<VerticalLayout> {
                 notification.setPosition(Notification.Position.MIDDLE);
                 notification.open();
             }
-        });
-
-        buttonPrimary.setWidth("min-content");
-        buttonPrimary.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-        buttonSecondary.setText("Alterar");
-
-        /*buttonSecondary.addClickListener(event -> {
-            int id = (int) Math.round(numberField.getValue());
-
-            if (id > 0) {
-                Autor autor = controller.pesquisar(id);
-        
-                if (autor != null) {
-                    autor.setNome_autor(textField.getValue());
-        
-                    if (controller.alterar(autor)) {
-                        Notification notification = new Notification(
-                                "Autor alterado com sucesso.", 3000);
-                        notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
-                        notification.setPosition(Notification.Position.MIDDLE);
-                        notification.open();
-                    } else {
-                        Notification notification = new Notification(
-                                "Erro ao alterar. Verifique se todos os dados foram preenchidos.", 3000);
-                        notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
-                        notification.setPosition(Notification.Position.MIDDLE);
-                        notification.open();
-                    }
-                } else {
-                    Notification notification = new Notification(
-                            "Autor com o ID fornecido não encontrado.", 3000);
-                    notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
-                    notification.setPosition(Notification.Position.MIDDLE);
-                    notification.open();
-                }
-            } else {
-                Notification notification = new Notification(
-                        "ID inválido. Por favor, insira um ID válido.", 3000);
-                notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
-                notification.setPosition(Notification.Position.MIDDLE);
-                notification.open();
-            }     
-        });*/
-    
-
-        buttonSecondary.setWidth("min-content");
-        buttonTertiary.setText("Deletar");
-        buttonTertiary.setWidth("min-content");
-        buttonTertiary.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
-
-        buttonTertiary.addClickListener(event -> {
-            int id = (int) Math.round(numberField.getValue());
-
-            if (id > 0) {
-                Autor autor = controller.pesquisar(id);
-        
-                if (autor != null) {
-                    if (controller.excluir(autor)) {
-                        Notification notification = new Notification(
-                                "Autor deletado com sucesso.", 3000);
-                        notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
-                        notification.setPosition(Notification.Position.MIDDLE);
-                        notification.open();
-                    } else {
-                        Notification notification = new Notification(
-                                "Erro ao deletar. Verifique se todos os dados foram preenchidos.", 3000);
-                        notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
-                        notification.setPosition(Notification.Position.MIDDLE);
-                        notification.open();
-                    }
-                } else {
-                    Notification notification = new Notification(
-                            "Autor com o ID fornecido não encontrado.", 3000);
-                    notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
-                    notification.setPosition(Notification.Position.MIDDLE);
-                    notification.open();
-                }
-            } else {
-                Notification notification = new Notification(
-                        "ID inválido. Por favor, insira um ID válido.", 3000);
-                notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
-                notification.setPosition(Notification.Position.MIDDLE);
-                notification.open();
-            }     
         });
 
         layoutRow2.setWidthFull();
@@ -245,12 +161,9 @@ public class AutorView extends Composite<VerticalLayout> {
         layoutColumn2.add(layoutColumn3);
         layoutColumn3.add(hr);
         layoutColumn3.add(formLayout2Col);
-        formLayout2Col.add(numberField);
         formLayout2Col.add(textField);
         layoutColumn3.add(layoutRow);
         layoutRow.add(buttonPrimary);
-        layoutRow.add(buttonSecondary);
-        layoutRow.add(buttonTertiary);
         layoutRow.add(hr2);
         layoutColumn3.add(hr3);
         layoutColumn3.add(layoutRow2);
