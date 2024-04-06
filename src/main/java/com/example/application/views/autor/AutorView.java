@@ -57,8 +57,6 @@ public class AutorView extends Composite<VerticalLayout> {
     FormLayout formLayout2Col = new FormLayout();
     HorizontalLayout layoutRow = new HorizontalLayout();
     Button buttonPrimary = new Button();
-    Button buttonSecondary = new Button();
-    Button buttonTertiary = new Button();
     Hr hr2 = new Hr();
     Hr hr3 = new Hr();
     HorizontalLayout layoutRow2 = new HorizontalLayout();

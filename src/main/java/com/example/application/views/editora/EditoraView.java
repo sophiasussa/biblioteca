@@ -49,12 +49,9 @@ public class EditoraView extends Composite<VerticalLayout> {
     VerticalLayout layoutColumn3 = new VerticalLayout();
     Hr hr = new Hr();
     FormLayout formLayout2Col = new FormLayout();
-    NumberField numberField = new NumberField();
     TextField textField = new TextField();
     HorizontalLayout layoutRow = new HorizontalLayout();
     Button buttonPrimary = new Button();
-    Button buttonSecondary = new Button();
-    Button buttonTertiary = new Button();
     Hr hr2 = new Hr();
     HorizontalLayout layoutRow2 = new HorizontalLayout();
     TextField textField2 = new TextField();
@@ -75,9 +72,8 @@ public class EditoraView extends Composite<VerticalLayout> {
         layoutColumn3.setWidth("100%");
         layoutColumn3.getStyle().set("flex-grow", "1");
         formLayout2Col.setWidth("100%");
-        numberField.setLabel("ID");
-        numberField.setWidth("min-content");
         textField.setLabel("Editora");
+        textField.setPlaceholder("Insira o nome da Editora");
         textField.setWidth("min-content");
         layoutRow.setWidthFull();
         layoutColumn3.setFlexGrow(1.0, layoutRow);
@@ -85,9 +81,10 @@ public class EditoraView extends Composite<VerticalLayout> {
         layoutRow.setWidth("100%");
         layoutRow.setHeight("50px");
         layoutRow.setAlignItems(Alignment.CENTER);
-        layoutRow.setJustifyContentMode(JustifyContentMode.END);
+        layoutRow.setJustifyContentMode(JustifyContentMode.START);
         buttonPrimary.setText("Salvar");
-
+        buttonPrimary.setWidth("min-content");
+        buttonPrimary.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         buttonPrimary.addClickListener(event -> {
             Editora editora = new Editora();
             editora.setNome_editora(textField.getValue());
@@ -106,89 +103,6 @@ public class EditoraView extends Composite<VerticalLayout> {
             }
         });
 
-        buttonPrimary.setWidth("min-content");
-        buttonPrimary.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-        buttonSecondary.setText("Alterar");
-        buttonSecondary.setWidth("min-content");
-
-        buttonSecondary.addClickListener(event -> {
-            int id = (int) Math.round(numberField.getValue());
-
-            if (id > 0) {
-                Editora editora = controller.pesquisar(id);
-        
-                if (editora != null) {
-                    editora.setNome_editora(textField.getValue());
-        
-                    if (controller.alterar(editora)) {
-                        Notification notification = new Notification(
-                                "Editora alterado com sucesso.", 3000);
-                        notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
-                        notification.setPosition(Notification.Position.MIDDLE);
-                        notification.open();
-                    } else {
-                        Notification notification = new Notification(
-                                "Erro ao alterar. Verifique se todos os dados foram preenchidos.", 3000);
-                        notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
-                        notification.setPosition(Notification.Position.MIDDLE);
-                        notification.open();
-                    }
-                } else {
-                    Notification notification = new Notification(
-                            "Editora com o ID fornecido não encontrado.", 3000);
-                    notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
-                    notification.setPosition(Notification.Position.MIDDLE);
-                    notification.open();
-                }
-            } else {
-                Notification notification = new Notification(
-                        "ID inválido. Por favor, insira um ID válido.", 3000);
-                notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
-                notification.setPosition(Notification.Position.MIDDLE);
-                notification.open();
-            }     
-        });
-
-
-        buttonTertiary.setText("Deletar");
-        buttonTertiary.setWidth("min-content");
-        buttonTertiary.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
-
-        buttonTertiary.addClickListener(event -> {
-            int id = (int) Math.round(numberField.getValue());
-
-            if (id > 0) {
-                Editora editora = controller.pesquisar(id);
-        
-                if (editora != null) {
-                    if (controller.excluir(editora)) {
-                        Notification notification = new Notification(
-                                "Editora deletado com sucesso.", 3000);
-                        notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
-                        notification.setPosition(Notification.Position.MIDDLE);
-                        notification.open();
-                    } else {
-                        Notification notification = new Notification(
-                                "Erro ao deletar. Verifique se todos os dados foram preenchidos.", 3000);
-                        notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
-                        notification.setPosition(Notification.Position.MIDDLE);
-                        notification.open();
-                    }
-                } else {
-                    Notification notification = new Notification(
-                            "Editora com o ID fornecido não encontrado.", 3000);
-                    notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
-                    notification.setPosition(Notification.Position.MIDDLE);
-                    notification.open();
-                }
-            } else {
-                Notification notification = new Notification(
-                        "ID inválido. Por favor, insira um ID válido.", 3000);
-                notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
-                notification.setPosition(Notification.Position.MIDDLE);
-                notification.open();
-            }     
-        });
         layoutRow2.setWidthFull();
         layoutColumn3.setFlexGrow(1.0, layoutRow2);
         layoutRow2.addClassName(Gap.MEDIUM);
@@ -236,12 +150,9 @@ public class EditoraView extends Composite<VerticalLayout> {
         layoutColumn2.add(layoutColumn3);
         layoutColumn3.add(hr);
         layoutColumn3.add(formLayout2Col);
-        formLayout2Col.add(numberField);
         formLayout2Col.add(textField);
         layoutColumn3.add(layoutRow);
         layoutRow.add(buttonPrimary);
-        layoutRow.add(buttonSecondary);
-        layoutRow.add(buttonTertiary);
         layoutColumn3.add(hr2);
         layoutColumn3.add(layoutRow2);
         layoutRow2.add(textField2);
