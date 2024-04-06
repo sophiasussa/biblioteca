@@ -8,12 +8,17 @@ import com.example.application.views.MainLayout;
 import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.contextmenu.MenuItem;
 import com.vaadin.flow.component.dependency.Uses;
+import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.Hr;
+import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.menubar.MenuBar;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
@@ -29,8 +34,12 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.data.VaadinSpringDataHelpers;
 import com.vaadin.flow.theme.lumo.LumoUtility.Gap;
 
+import aj.org.objectweb.asm.Label;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.swing.Popup;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -107,7 +116,7 @@ public class AutorView extends Composite<VerticalLayout> {
         buttonPrimary.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         buttonSecondary.setText("Alterar");
 
-        buttonSecondary.addClickListener(event -> {
+        /*buttonSecondary.addClickListener(event -> {
             int id = (int) Math.round(numberField.getValue());
 
             if (id > 0) {
@@ -143,7 +152,7 @@ public class AutorView extends Composite<VerticalLayout> {
                 notification.setPosition(Notification.Position.MIDDLE);
                 notification.open();
             }     
-        });
+        });*/
     
 
         buttonSecondary.setWidth("min-content");
@@ -250,39 +259,111 @@ public class AutorView extends Composite<VerticalLayout> {
       //  addGridToConsultaTab(layoutColumn3);
     }
 
-        private void addGridToConsultaTab(List<Autor> autores) {
-            if (grid == null) {
-                grid = new Grid<>();
-                grid.addColumn(Autor::getId).setHeader("ID");
-                grid.addColumn(Autor::getNome_autor).setHeader("Nome");
+    private void addGridToConsultaTab(List<Autor> autores) {
+        if (grid == null) {
+            grid = new Grid<>();
+            grid.addColumn(Autor::getId).setHeader("ID");
+            grid.addColumn(Autor::getNome_autor).setHeader("Nome");
+    
+            grid.addComponentColumn(autor -> {
 
-                grid.setItems(autores);
-
-                grid.addItemDoubleClickListener(event -> {
-                    Autor autor = event.getItem();
-                    if (autor != null) {
-                        numberField.setValue(Double.parseDouble(String.valueOf(autor.getId())));
-                        textField.setValue(autor.getNome_autor());
-                    }
-                });
-            }else{
-                layoutColumn3.remove(grid);
-                grid = null;
-
-                grid = new Grid<>();
-                grid.addColumn(Autor::getId).setHeader("ID");
-                grid.addColumn(Autor::getNome_autor).setHeader("Nome");
-                grid.setItems(autores);
-        
-                grid.addItemDoubleClickListener(event -> {
-                    Autor autor = event.getItem();
-                    if (autor != null) {
-                        numberField.setValue(Double.parseDouble(String.valueOf(autor.getId())));
-                        textField.setValue(autor.getNome_autor());
-                    }
-                });
-            }    
+                MenuBar menuBar = new MenuBar();
+                
+                MenuItem editarItem = menuBar.addItem(new Icon(VaadinIcon.EDIT), e -> abrirPopupEdicao(autor));
+                MenuItem excluirItem = menuBar.addItem(new Icon(VaadinIcon.TRASH), e -> abrirPopupExclusao(autor));
+                
+                editarItem.getElement().setAttribute("title", "Editar autor");
+                excluirItem.getElement().setAttribute("title", "Excluir autor");
+                
+                return menuBar;
+            }).setHeader("Opções");
+            
+            grid.setItems(autores);
             layoutColumn3.add(grid);
-        
+        } else {
+            
+            grid.setItems(autores);
+        }
     }
+
+    private void abrirPopupEdicao(Autor autor) {
+        Dialog dialog = new Dialog();
+        FormLayout formLayout = new FormLayout();
+        TextField nomeField = new TextField("Nome");
+        nomeField.setValue(autor.getNome_autor());
+        formLayout.add(nomeField);
+
+        Button confirmarButton = new Button("Confirmar", event -> {
+            autor.setNome_autor(nomeField.getValue());
+            if (controller.alterar(autor)) {
+                Notification.show("Autor alterado com sucesso.").addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+            } else {
+                Notification.show("Erro ao alterar. Verifique se todos os dados foram preenchidos.")
+                        .addThemeVariants(NotificationVariant.LUMO_ERROR);
+            }
+            dialog.close();
+        });
+        Button cancelarButton = new Button("Cancelar", event -> dialog.close());
+
+        formLayout.add(confirmarButton, cancelarButton);
+        dialog.add(formLayout);
+        dialog.open();
+    }
+
+    private void adicionarIconeEdicao(Grid<Autor> grid, Autor autor) {
+        Icon iconEditar = new Icon(VaadinIcon.EDIT);
+        iconEditar.addClickListener(event -> abrirPopupEdicao(autor));
+
+        grid.addComponentColumn(item -> {
+            MenuBar menuBar = new MenuBar();
+            MenuItem editarItem = menuBar.addItem("Editar", e -> abrirPopupEdicao(autor));
+            editarItem.getElement().setAttribute("title", "Editar autor");
+            return menuBar;
+        }).setHeader("Opções");
+    }
+
+    private void abrirPopupExclusao(Autor autor) {
+        Dialog dialog = new Dialog();
+        FormLayout formLayout = new FormLayout();
+
+        Span mensagem = new Span("Tem certeza que deseja excluir?");
+        formLayout.add(mensagem);
+
+        NumberField idField = new NumberField("ID");
+        idField.setValue((double) autor.getId());
+        idField.setReadOnly(true);
+        formLayout.add(idField);
+
+        int id = (int) Math.round(idField.getValue());
+        final Autor autorParaExcluir = controller.pesquisar(id);
+
+        Button confirmarButton = new Button("Confirmar", event -> {
+            if (controller.excluir(autorParaExcluir)) {
+                Notification.show("Autor alterado com sucesso.").addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+            } else {
+                Notification.show("Erro ao alterar. Verifique se todos os dados foram preenchidos.")
+                        .addThemeVariants(NotificationVariant.LUMO_ERROR);
+            }
+            dialog.close();
+        });
+        Button cancelarButton = new Button("Cancelar", event -> dialog.close());
+
+        formLayout.add(confirmarButton, cancelarButton);
+        dialog.add(formLayout);
+        dialog.open();
+    }
+
+    private void adicionarIconeExclusao(Grid<Autor> grid, Autor autor) {
+        Icon iconEditar = new Icon(VaadinIcon.EDIT);
+        iconEditar.addClickListener(event -> abrirPopupExclusao(autor));
+
+        grid.addComponentColumn(item -> {
+            MenuBar menuBar = new MenuBar();
+            MenuItem editarItem = menuBar.addItem("Exclusao", e -> abrirPopupExclusao(autor));
+            editarItem.getElement().setAttribute("title", "Excluir autor");
+            return menuBar;
+        }).setHeader("Opções");
+    }
+
 }
+
