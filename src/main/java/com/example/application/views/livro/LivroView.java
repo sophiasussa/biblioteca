@@ -25,6 +25,7 @@ import com.vaadin.flow.component.dependency.Uses;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.formlayout.FormLayout.ResponsiveStep;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.H4;
@@ -58,544 +59,199 @@ import org.springframework.data.domain.PageRequest;
 @Route(value = "livro", layout = MainLayout.class)
 @Uses(Icon.class)
 public class LivroView extends Composite<VerticalLayout> {
-    ControllerEdicao controller = new ControllerEdicao();
-    ControllerLivro controller2 = new ControllerLivro();
-    ControllerEditora controller3 = new ControllerEditora();
-    ControllerAutor controller4 = new ControllerAutor();
-    VerticalLayout layoutColumn2 = new VerticalLayout();
-    VerticalLayout layoutColumn3 = new VerticalLayout();
-    FormLayout formLayout2Col = new FormLayout();
     H3 h3 = new H3();
-    HorizontalLayout layoutRow = new HorizontalLayout();
-    VerticalLayout layoutColumn4 = new VerticalLayout();
-    Hr hr = new Hr();
-    FormLayout formLayout2Col2 = new FormLayout();
-    NumberField numberField = new NumberField();
-    TextField textField = new TextField();
-    TextField txtData = new TextField();
-    TextArea textArea = new TextArea();
-    ComboBox<Autor> comboBox = new ComboBox();
-    ComboBox<Editora> comboBox2 = new ComboBox();
-    ComboBox<Livro> comboBox3 = new ComboBox();
-    RouterLink routerLink = new RouterLink();
-    RouterLink routerLink2 = new RouterLink();
-    HorizontalLayout layoutRow2 = new HorizontalLayout();
-    Button buttonPrimary = new Button();
-    Button buttonSecondary = new Button();
-    Button buttonTertiary = new Button();
-    Hr hr2 = new Hr();
-    H4 h4 = new H4();
     FormLayout formLayout3Col = new FormLayout();
-    NumberField numberField2 = new NumberField();
-    TextField txtData2 = new TextField();
-    TextArea textArea2 = new TextArea();
+    TextField textField = new TextField();
+    TextField textField2 = new TextField();
+    TextArea textArea = new TextArea();
+    FormLayout formLayout2Col = new FormLayout();
+    ComboBox comboBox = new ComboBox();
+    ComboBox comboBox2 = new ComboBox();
+    Anchor link = new Anchor();
+    Anchor link2 = new Anchor();
+    Button buttonPrimary = new Button();
+    H3 h32 = new H3();
+    HorizontalLayout layoutRow = new HorizontalLayout();
+    HorizontalLayout layoutRow2 = new HorizontalLayout();
+    FormLayout formLayout3Col2 = new FormLayout();
+    TextField textField3 = new TextField();
+    TextField textField4 = new TextField();
+    ComboBox comboBox3 = new ComboBox();
     HorizontalLayout layoutRow3 = new HorizontalLayout();
     Button buttonPrimary2 = new Button();
+
+
+    TextField textField5 = new TextField();
+    Button buttonSecondary = new Button();
+    Grid basicGrid = new Grid();
+    TextField textField6 = new TextField();
     Button buttonSecondary2 = new Button();
-    Button buttonTertiary2 = new Button();
-    Hr hr3 = new Hr();
+    Grid basicGrid2 = new Grid();
+
     HorizontalLayout layoutRow4 = new HorizontalLayout();
-    TextField textField2 = new TextField();
-    Button buttonSecondary3 = new Button();
-    Button buttonSecondary4 = new Button();
-    Grid<Livro> grid;
-    Grid<Edicao> grid1;
+    HorizontalLayout layoutRow5 = new HorizontalLayout();
 
     public LivroView() {
-        formLayout2Col.setWidth("100%");
-        h3.setText("Cadastrar Livro");
+        Tab tabLivro = new Tab("Livro e Edição");
+        Tab tabPesquisa = new Tab("Pesquisar, Alterar e Excluir");
+
+        Tabs tabs = new Tabs(tabLivro, tabPesquisa);
+        VerticalLayout content = new VerticalLayout();
+        content.setSizeFull();
+        getContent().add(tabs, content);
+
+        tabs.addSelectedChangeListener(event -> {
+            if (event.getSelectedTab() == tabLivro) {
+                showLivroTab(content);
+            } else if (event.getSelectedTab() == tabPesquisa) {
+                showPesquisa(content);
+            }
+        });
+
+        tabs.setSelectedTab(tabLivro);
+        showLivroTab(content);
+    }
+
+    private void showLivroTab(VerticalLayout content){
+        content.removeAll();
+
+        VerticalLayout layoutColumn2 = new VerticalLayout();
+
+        getContent().setWidth("100%");
+        getContent().getStyle().set("flex-grow", "1");
+        layoutColumn2.setWidthFull();
+        getContent().setFlexGrow(1.0, layoutColumn2);
+        layoutColumn2.setWidth("100%");
+        layoutColumn2.getStyle().set("flex-grow", "1");
+        h3.setText("Cadastrar livro");
         h3.setWidth("max-content");
-        layoutRow.setWidthFull();
-        layoutColumn3.setFlexGrow(1.0, layoutRow);
-        layoutRow.addClassName(Gap.MEDIUM);
-        layoutRow.setWidth("100%");
-        layoutRow.getStyle().set("flex-grow", "1");
-        layoutColumn4.setHeightFull();
-        layoutRow.setFlexGrow(1.0, layoutColumn4);
-        layoutColumn4.setWidth("100%");
-        layoutColumn4.getStyle().set("flex-grow", "1");
-        formLayout2Col2.setWidth("100%");
-        numberField.setLabel("ID");
-        numberField.setWidth("min-content");
-        textField.setLabel("Nome");
-        textField.setWidth("min-content");
-        txtData.setLabel("Ano de Publicação");
-        txtData.setWidth("min-content");
-        textArea.setLabel("Descrição");
-        textArea.setWidth("100%");
-        comboBox.setLabel("Autor");
-        comboBox.setWidth("min-content");
-        comboBox2.setLabel("Editora");
-        comboBox2.setWidth("min-content");
-        routerLink.setText("Adicionar Autor");
-        routerLink.setRoute(AutorView.class);
-        routerLink2.setText("Adicionar Editora");
-        routerLink2.setRoute(EditoraView.class);
-        layoutRow2.setWidthFull();
-        layoutColumn4.setFlexGrow(1.0, layoutRow2);
-        layoutRow2.addClassName(Gap.MEDIUM);
-        layoutRow2.setWidth("100%");
-        layoutRow2.getStyle().set("flex-grow", "1");
-        layoutRow2.setAlignItems(Alignment.START);
-        layoutRow2.setJustifyContentMode(JustifyContentMode.END);
-        buttonPrimary.setText("Cadastrar");
-        buttonPrimary.setWidth("min-content");
-        buttonPrimary.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-
-        buttonPrimary.addClickListener(event -> {
-            Livro livro = new Livro();
-            livro.setNome_livro(textField.getValue());
-            livro.setDescricao(textArea.getValue());
-            livro.setAno_publicacao(Integer.parseInt(txtData.getValue()));
-            Autor autorSelecionado = comboBox.getValue();
-            Editora editoraSelecionado = comboBox2.getValue();
-
-            if (autorSelecionado != null && editoraSelecionado != null) {
-                livro.setAutor(autorSelecionado);
-                livro.setEditora(editoraSelecionado);
-                if (controller2.inserir(livro) == true) {
-                    Notification notification = new Notification(
-                            "Livro salvo com sucesso.", 3000);
-                    notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
-                    notification.setPosition(Notification.Position.MIDDLE);
-                    notification.open();
-                } else {
-                    Notification notification = new Notification(
-                            "Erro ao salvar. Verifique se todos os dados foram preenchidos.", 3000);
-                    notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
-                    notification.setPosition(Notification.Position.MIDDLE);
-                    notification.open();
-                }
-            } else {
-                Notification notification = new Notification(
-                        "Por favor, selecione um autor ou editora.", 3000);
-                notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
-                notification.setPosition(Notification.Position.MIDDLE);
-                notification.open();
-                return;
-            }
-        });
-        buttonSecondary.setText("Alterar");
-        buttonSecondary.setWidth("min-content");
-
-        buttonSecondary.addClickListener(event -> {
-            int id = (int) Math.round(numberField.getValue());
-
-            if (id > 0) {
-                Livro livro = controller2.pesquisar(id);
-
-                if (livro != null) {
-                    livro.setNome_livro(textField.getValue());
-                    livro.setDescricao(textArea.getValue());
-                    livro.setAno_publicacao(Integer.parseInt(txtData.getValue()));
-                    Autor autorSelecionado = comboBox.getValue();
-                    livro.setAutor(autorSelecionado);
-                    Editora editoraSelecionado = comboBox2.getValue();
-                    livro.setEditora(editoraSelecionado);
-
-                    if (controller2.alterar(livro)) {
-                        Notification notification = new Notification(
-                                "Livro alterado com sucesso.", 3000);
-                        notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
-                        notification.setPosition(Notification.Position.MIDDLE);
-                        notification.open();
-                    } else {
-                        Notification notification = new Notification(
-                                "Erro ao alterar. Verifique se todos os dados foram preenchidos.", 3000);
-                        notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
-                        notification.setPosition(Notification.Position.MIDDLE);
-                        notification.open();
-                    }
-                } else {
-                    Notification notification = new Notification(
-                            "Livro com o ID fornecido não encontrado.", 3000);
-                    notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
-                    notification.setPosition(Notification.Position.MIDDLE);
-                    notification.open();
-                }
-            } else {
-                Notification notification = new Notification(
-                        "ID inválido. Por favor, insira um ID válido.", 3000);
-                notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
-                notification.setPosition(Notification.Position.MIDDLE);
-                notification.open();
-            }
-        });
-
-        buttonTertiary.setText("Deletar");
-        buttonTertiary.setWidth("min-content");
-        buttonTertiary.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
-
-        buttonTertiary.addClickListener(event -> {
-            int id = (int) Math.round(numberField.getValue());
-
-            if (id > 0) {
-                Livro livro = controller2.pesquisar(id);
-
-                if (livro != null) {
-                    if (controller2.excluir(livro)) {
-                        Notification notification = new Notification(
-                                "Livro deletado com sucesso.", 3000);
-                        notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
-                        notification.setPosition(Notification.Position.MIDDLE);
-                        notification.open();
-                    } else {
-                        Notification notification = new Notification(
-                                "Erro ao deletar. Verifique se todos os dados foram preenchidos.", 3000);
-                        notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
-                        notification.setPosition(Notification.Position.MIDDLE);
-                        notification.open();
-                    }
-                } else {
-                    Notification notification = new Notification(
-                            "Livro com o ID fornecido não encontrado.", 3000);
-                    notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
-                    notification.setPosition(Notification.Position.MIDDLE);
-                    notification.open();
-                }
-            } else {
-                Notification notification = new Notification(
-                        "ID inválido. Por favor, insira um ID válido.", 3000);
-                notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
-                notification.setPosition(Notification.Position.MIDDLE);
-                notification.open();
-            }
-        });
-
-        h4.setText("Adicionar Edição");
-        h4.setWidth("max-content");
         formLayout3Col.setWidth("100%");
         formLayout3Col.setResponsiveSteps(new ResponsiveStep("0", 1), new ResponsiveStep("250px", 2),
                 new ResponsiveStep("500px", 3));
-        numberField2.setLabel("ID - Edição");
-        numberField2.setWidth("min-content");
-        txtData2.setLabel("Ano - Edição");
-        txtData2.setWidth("min-content");
-        textArea2.setLabel("Descrição Edição");
-        textArea2.setWidth("100%");
-        comboBox3.setLabel("Livro");
-        comboBox3.setWidth("min-content");
-
+        textField.setLabel("Text field");
+        textField.setWidth("min-content");
+        textField2.setLabel("Text field");
+        textField2.setWidth("min-content");
+        textArea.setLabel("Text area");
+        textArea.setWidth("100%");
+        formLayout2Col.setWidth("100%");
+        comboBox.setLabel("Combo Box");
+        comboBox.setWidth("min-content");
+        comboBox2.setLabel("Combo Box");
+        comboBox2.setWidth("min-content");
+        link.setText("Hello Vaadin");
+        link.setHref("#");
+        link.setWidth("min-content");
+        link2.setText("Hello Vaadin");
+        link2.setHref("#");
+        link2.setWidth("min-content");
+        buttonPrimary.setText("Button");
+        buttonPrimary.setWidth("min-content");
+        buttonPrimary.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        h32.setText("Cadastrar Edição");
+        h32.setWidth("max-content");
+        layoutRow.setWidthFull();
+        layoutColumn2.setFlexGrow(1.0, layoutRow);
+        layoutRow.addClassName(Gap.MEDIUM);
+        layoutRow.setWidth("100%");
+        layoutRow.getStyle().set("flex-grow", "1");
+        layoutRow2.setHeightFull();
+        layoutRow.setFlexGrow(1.0, layoutRow2);
+        layoutRow2.addClassName(Gap.MEDIUM);
+        layoutRow2.setWidth("100%");
+        layoutRow2.getStyle().set("flex-grow", "1");
+        formLayout3Col2.setWidth("1055px");
+        formLayout3Col2.setHeight("90px");
+        formLayout3Col2.getStyle().set("flex-grow", "0");
+        formLayout3Col2.setResponsiveSteps(new ResponsiveStep("0", 1), new ResponsiveStep("250px", 2),
+                new ResponsiveStep("500px", 3));
+        textField3.setLabel("Text field");
+        textField3.setWidth("min-content");
+        textField4.setLabel("Text field");
+        textField4.setWidth("min-content");
+        comboBox3.setLabel("Combo Box");
         layoutRow3.setWidthFull();
-        layoutColumn4.setFlexGrow(1.0, layoutRow3);
+        layoutColumn2.setFlexGrow(1.0, layoutRow3);
         layoutRow3.addClassName(Gap.MEDIUM);
         layoutRow3.setWidth("100%");
         layoutRow3.getStyle().set("flex-grow", "1");
-        layoutRow3.setAlignItems(Alignment.START);
-        layoutRow3.setJustifyContentMode(JustifyContentMode.END);
-        buttonPrimary2.setText("Cadastrar");
+        buttonPrimary2.setText("Button");
         buttonPrimary2.setWidth("min-content");
         buttonPrimary2.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        layoutColumn2.add(h3);
+        layoutColumn2.add(formLayout3Col);
+        formLayout3Col.add(textField);
+        formLayout3Col.add(textField2);
+        formLayout3Col.add(textArea);
+        layoutColumn2.add(formLayout2Col);
+        formLayout2Col.add(comboBox);
+        formLayout2Col.add(comboBox2);
+        formLayout2Col.add(link);
+        formLayout2Col.add(link2);
+        layoutColumn2.add(buttonPrimary);
+        layoutColumn2.add(h32);
+        layoutColumn2.add(layoutRow);
+        layoutRow.add(layoutRow2);
+        layoutRow2.add(formLayout3Col2);
+        formLayout3Col2.add(textField3);
+        formLayout3Col2.add(textField4);
+        formLayout3Col2.add(comboBox3);
+        layoutColumn2.add(layoutRow3);
+        layoutRow3.add(buttonPrimary2);
 
-        buttonPrimary2.addClickListener(event -> {
-            Edicao edicao = new Edicao();
-            edicao.setAno(Integer.parseInt(txtData2.getValue()));
-            edicao.setNovo_conteudo(textArea2.getValue());
-            Livro livroSelecionado = comboBox3.getValue();
+        content.add(layoutColumn2);
+    }
 
-            if (livroSelecionado != null) {
-                edicao.setLivro(livroSelecionado);
-            } else {
-                Notification notification = new Notification(
-                        "Por favor, selecione um livro.", 3000);
-                notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
-                notification.setPosition(Notification.Position.MIDDLE);
-                notification.open();
-                return;
-            }
+    private void showPesquisa(VerticalLayout content){
+        content.removeAll();
 
-            if (controller.inserir(edicao) == true) {
-                Notification notification = new Notification(
-                        "Edição salvo com sucesso.", 3000);
-                notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
-                notification.setPosition(Notification.Position.MIDDLE);
-                notification.open();
-            } else {
-                Notification notification = new Notification(
-                        "Erro ao salvar. Verifique se todos os dados foram preenchidos.", 3000);
-                notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
-                notification.setPosition(Notification.Position.MIDDLE);
-                notification.open();
-            }
-        });
+        VerticalLayout layoutColumn3 = new VerticalLayout();
 
-        buttonSecondary2.setText("Alterar");
-        buttonSecondary2.setWidth("min-content");
-
-        buttonSecondary2.addClickListener(event -> {
-            int id = (int) Math.round(numberField2.getValue());
-
-            if (id > 0) {
-                Edicao edicao = controller.pesquisar(id);
-
-                if (edicao != null) {
-                    edicao.setAno(Integer.parseInt(txtData2.getValue()));
-                    edicao.setNovo_conteudo(textArea2.getValue());
-
-                    if (controller.alterar(edicao)) {
-                        Notification notification = new Notification(
-                                "Edicao alterado com sucesso.", 3000);
-                        notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
-                        notification.setPosition(Notification.Position.MIDDLE);
-                        notification.open();
-                    } else {
-                        Notification notification = new Notification(
-                                "Erro ao alterar. Verifique se todos os dados foram preenchidos.", 3000);
-                        notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
-                        notification.setPosition(Notification.Position.MIDDLE);
-                        notification.open();
-                    }
-                } else {
-                    Notification notification = new Notification(
-                            "Edicao com o ID fornecido não encontrado.", 3000);
-                    notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
-                    notification.setPosition(Notification.Position.MIDDLE);
-                    notification.open();
-                }
-            } else {
-                Notification notification = new Notification(
-                        "ID inválido. Por favor, insira um ID válido.", 3000);
-                notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
-                notification.setPosition(Notification.Position.MIDDLE);
-                notification.open();
-            }
-        });
-
-        buttonTertiary2.setText("Deletar");
-        buttonTertiary2.setWidth("min-content");
-        buttonTertiary2.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
-
-        buttonTertiary2.addClickListener(event -> {
-            int id = (int) Math.round(numberField2.getValue());
-
-            if (id > 0) {
-                Edicao edicao = controller.pesquisar(id);
-
-                if (edicao != null) {
-                    if (controller.excluir(edicao)) {
-                        Notification notification = new Notification(
-                                "Edicao deletado com sucesso.", 3000);
-                        notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
-                        notification.setPosition(Notification.Position.MIDDLE);
-                        notification.open();
-                    } else {
-                        Notification notification = new Notification(
-                                "Erro ao deletar. Verifique se todos os dados foram preenchidos.", 3000);
-                        notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
-                        notification.setPosition(Notification.Position.MIDDLE);
-                        notification.open();
-                    }
-                } else {
-                    Notification notification = new Notification(
-                            "Edicao com o ID fornecido não encontrado.", 3000);
-                    notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
-                    notification.setPosition(Notification.Position.MIDDLE);
-                    notification.open();
-                }
-            } else {
-                Notification notification = new Notification(
-                        "ID inválido. Por favor, insira um ID válido.", 3000);
-                notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
-                notification.setPosition(Notification.Position.MIDDLE);
-                notification.open();
-            }
-        });
+        layoutColumn3.setWidthFull();
+        getContent().setFlexGrow(1.0, layoutColumn3);
+        layoutColumn3.setWidth("100%");
+        layoutColumn3.getStyle().set("flex-grow", "1");
+        h3.setText("Livro");
+        h3.setWidth("max-content");
         layoutRow4.setWidthFull();
         layoutColumn3.setFlexGrow(1.0, layoutRow4);
         layoutRow4.addClassName(Gap.MEDIUM);
         layoutRow4.setWidth("100%");
-        layoutRow4.getStyle().set("flex-grow", "1");
-        layoutRow4.setAlignItems(Alignment.CENTER);
+        layoutRow4.setHeight("70px");
+        layoutRow4.setAlignItems(Alignment.END);
         layoutRow4.setJustifyContentMode(JustifyContentMode.END);
-        textField2.setLabel("");
-        textField2.setWidth("min-content");
-        textField2.setPrefixComponent(new Icon("lumo", "search"));
-        buttonSecondary3.setText("Pesquisar Livro");
-        layoutRow4.setAlignSelf(FlexComponent.Alignment.END, buttonSecondary3);
-        buttonSecondary3.setWidth("min-content");
-
-        buttonSecondary3.addClickListener(event -> {
-            if (textField2.isEmpty()) {
-                List<Livro> livro = controller2.pesquisarTodos();
-                addGridToConsultaTab(livro);
-            } else {
-                try {
-                    int id = (int) Math.round(Double.parseDouble(textField2.getValue()));
-                    Livro livro = controller2.pesquisar(id);
-                    if (livro != null) {
-                        List<Livro> livrosEncontrados = new ArrayList<>();
-                        livrosEncontrados.add(livro);
-                        addGridToConsultaTab(livrosEncontrados);
-                    } else {
-                        Notification notification = new Notification(
-                                "Livro com o ID fornecido não encontrado.", 3000);
-                        notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
-                        notification.setPosition(Notification.Position.MIDDLE);
-                        notification.open();
-                    }
-                } catch (NumberFormatException e) {
-                    Notification notification = new Notification(
-                            "ID inválido. Por favor, insira um ID válido.", 3000);
-                    notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
-                    notification.setPosition(Notification.Position.MIDDLE);
-                    notification.open();
-                }
-            }
-        });
-
-        buttonSecondary4.setText("Pesquisar Edição");
-        layoutRow4.setAlignSelf(FlexComponent.Alignment.END, buttonSecondary4);
-        buttonSecondary4.setWidth("min-content");
-
-        buttonSecondary4.addClickListener(event -> {
-            if (textField2.isEmpty()) {
-                List<Edicao> edicao = controller.pesquisarTodos();
-                addGridToConsultaTab2(edicao);
-            } else {
-                try {
-                    int id = (int) Math.round(Double.parseDouble(textField2.getValue()));
-                    Edicao edicao = controller.pesquisar(id);
-                    if (edicao != null) {
-                        List<Edicao> edicaoEncontrados = new ArrayList<>();
-                        edicaoEncontrados.add(edicao);
-                        addGridToConsultaTab2(edicaoEncontrados);
-                    } else {
-                        Notification notification = new Notification(
-                                "Edição com o ID fornecido não encontrado.", 3000);
-                        notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
-                        notification.setPosition(Notification.Position.MIDDLE);
-                        notification.open();
-                    }
-                } catch (NumberFormatException e) {
-                    Notification notification = new Notification(
-                            "ID inválido. Por favor, insira um ID válido.", 3000);
-                    notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
-                    notification.setPosition(Notification.Position.MIDDLE);
-                    notification.open();
-                }
-            }
-        });
-
-        getContent().add(layoutColumn2);
-        layoutColumn2.add(layoutColumn3);
-        layoutColumn3.add(formLayout2Col);
-        formLayout2Col.add(h3);
-        layoutColumn3.add(layoutRow);
-        layoutRow.add(layoutColumn4);
-        layoutColumn4.add(hr);
-        layoutColumn4.add(formLayout2Col2);
-        formLayout2Col2.add(numberField);
-        formLayout2Col2.add(textField);
-        formLayout2Col2.add(txtData);
-        formLayout2Col2.add(textArea);
-        formLayout2Col2.add(comboBox);
-        formLayout2Col2.add(comboBox2);
-        formLayout2Col2.add(routerLink);
-        formLayout2Col2.add(routerLink2);
-        layoutColumn4.add(layoutRow2);
-        layoutRow2.add(buttonPrimary);
-        layoutRow2.add(buttonSecondary);
-        layoutRow2.add(buttonTertiary);
-        layoutColumn4.add(hr2);
-        layoutColumn4.add(h4);
-        layoutColumn4.add(formLayout3Col);
-        formLayout3Col.add(numberField2);
-        formLayout3Col.add(txtData2);
-        formLayout3Col.add(textArea2);
-        formLayout3Col.add(comboBox3);
-        layoutColumn4.add(layoutRow3);
-        layoutRow3.add(buttonPrimary2);
-        layoutRow3.add(buttonSecondary2);
-        layoutRow3.add(buttonTertiary2);
-        layoutColumn4.add(hr3);
+        textField5.setLabel("Text field");
+        textField5.setWidth("min-content");
+        buttonSecondary.setText("Button");
+        buttonSecondary.setWidth("min-content");
+        basicGrid.setWidth("100%");
+        basicGrid.getStyle().set("flex-grow", "0");
+        h32.setText("Edição");
+        h32.setWidth("max-content");
+        layoutRow5.setWidthFull();
+        layoutColumn3.setFlexGrow(1.0, layoutRow5);
+        layoutRow5.addClassName(Gap.MEDIUM);
+        layoutRow5.setWidth("100%");
+        layoutRow5.getStyle().set("flex-grow", "1");
+        layoutRow5.setAlignItems(Alignment.END);
+        layoutRow5.setJustifyContentMode(JustifyContentMode.END);
+        textField6.setLabel("Text field");
+        textField6.setWidth("min-content");
+        buttonSecondary2.setText("Button");
+        buttonSecondary2.setWidth("min-content");
+        basicGrid2.setWidth("100%");
+        basicGrid2.getStyle().set("flex-grow", "0");
+        layoutColumn3.add(h3);
         layoutColumn3.add(layoutRow4);
-        layoutRow4.add(textField2);
-        layoutRow4.add(buttonSecondary3);
-        layoutRow4.add(buttonSecondary4);
+        layoutRow4.add(textField5);
+        layoutRow4.add(buttonSecondary);
+        layoutColumn3.add(basicGrid);
+        layoutColumn3.add(h32);
+        layoutColumn3.add(layoutRow5);
+        layoutRow5.add(textField6);
+        layoutRow5.add(buttonSecondary2);
+        layoutColumn3.add(basicGrid2);
 
-        setComboBoxAutorData(comboBox);
-        setComboBoxEditoraData(comboBox2);
-        setComboBoxData(comboBox3);
+        content.add(layoutColumn3);
     }
-
-    private void setComboBoxData(ComboBox<Livro> comboBox3) {
-        List<Livro> livros = controller2.pesquisarTodos();
-        comboBox3.setItems(livros);
-        comboBox3.setItemLabelGenerator(livro -> livro.getNome_livro());
-    }
-
-    private void setComboBoxAutorData(ComboBox<Autor> comboBox) {
-        List<Autor> autores = controller4.pesquisarTodos();
-        comboBox.setItems(autores);
-        comboBox.setItemLabelGenerator(autor -> autor.getNome_autor());
-    }
-
-    private void setComboBoxEditoraData(ComboBox<Editora> comboBox2) {
-        List<Editora> editoras = controller3.pesquisarTodos();
-        comboBox2.setItems(editoras);
-        comboBox2.setItemLabelGenerator(editora -> editora.getNome_editora());
-    }
-
-    private void addGridToConsultaTab(List<Livro> livros) {
-        if (grid == null) {
-            grid = new Grid<>();
-            grid.addColumn(Livro::getId).setHeader("ID");
-            grid.addColumn(Livro::getNome_livro).setHeader("Nome");
-            grid.addColumn(Livro::getDescricao).setHeader("Descricao");
-            grid.addColumn(Livro::getAno_publicacao).setHeader("Ano de Publicação");
-            grid.addColumn(livro -> livro.getAutor().getNome_autor()).setHeader("Autor");
-            grid.addColumn(livro -> livro.getEditora().getNome_editora()).setHeader("Editora");
-            grid.setItems(livros);
-
-            grid.addItemDoubleClickListener(event -> {
-                Livro livro = event.getItem();
-                if (livro != null) {
-                    numberField.setValue(Double.parseDouble(String.valueOf(livro.getId())));
-                    textField.setValue(livro.getNome_livro());
-                    textArea.setValue(livro.getDescricao());
-                    txtData.setValue(String.valueOf(livro.getAno_publicacao()));
-                    Autor autor = livro.getAutor();
-                    comboBox.setItems(livro.getAutor()); 
-                    comboBox.setValue(livro.getAutor()); 
-            
-                    Editora editora = livro.getEditora();
-                    comboBox2.setItems(livro.getEditora());
-                    comboBox2.setValue(livro.getEditora()); 
-                }
-            });
-
-            layoutColumn3.add(grid);
-        } else {
-            grid.setItems(livros);
-        }
-    }
-
-    private void addGridToConsultaTab2(List<Edicao> edicoes) {
-        if (grid1 == null) {
-            grid1 = new Grid<>();
-            grid1.addColumn(Edicao::getId).setHeader("ID");
-            grid1.addColumn(Edicao::getAno).setHeader("Ano");           
-            grid1.addColumn(Edicao::getNovo_conteudo).setHeader("Descrição");   
-            grid1.addColumn(edicao -> edicao.getLivro().getNome_livro()).setHeader("Livro");
-
-            grid1.setItems(edicoes);
-
-            grid1.addItemDoubleClickListener(event -> {
-                Edicao edicao = event.getItem();
-                if (edicao != null) {
-                    numberField2.setValue(Double.parseDouble(String.valueOf(edicao.getId())));
-                    textArea2.setValue(edicao.getNovo_conteudo());
-                    txtData2.setValue(String.valueOf(edicao.getAno()));
-                    Livro livro = edicao.getLivro();
-                    comboBox3.setItems(edicao.getLivro());
-                    comboBox3.setValue(edicao.getLivro());
-                }
-            });
-
-            layoutColumn3.add(grid1);
-        } else {
-            grid1.setItems(edicoes);
-        }
-    }
-
 }
