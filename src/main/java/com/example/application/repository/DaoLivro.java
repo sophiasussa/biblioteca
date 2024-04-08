@@ -39,12 +39,14 @@ public class DaoLivro {
 	public boolean alterar(Livro livro) {
 		try {
 			Connection connection = DBConnection.getInstance().getConnection();
-			String update = "UPDATE livro set nome_livro = ?, descricao = ?, ano_publicacao  = ? where id = ?";
+			String update = "UPDATE livro set nome_livro = ?, descricao = ?, ano_publicacao  = ?, id_autor = ?, id_editora = ? where id = ?";
 			PreparedStatement preparedStatement1 = connection.prepareStatement(update);
-			preparedStatement1.setInt(4, livro.getId());
+			preparedStatement1.setInt(6, livro.getId());
 			preparedStatement1.setString(1, livro.getNome_livro());
 			preparedStatement1.setString(2, livro.getDescricao());
 			preparedStatement1.setInt(3, livro.getAno_publicacao());
+			preparedStatement1.setInt(4, livro.getAutor().getId());
+			preparedStatement1.setInt(5, livro.getEditora().getId());
 			int resultado = preparedStatement1.executeUpdate();
 			if (resultado > 0) {
 				return true;
@@ -53,6 +55,7 @@ public class DaoLivro {
 			}
 
 		} catch (Exception e) {
+			e.printStackTrace();
 			return false;
 		}
 	}

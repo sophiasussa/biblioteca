@@ -32,6 +32,7 @@ import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.html.Hr;
+import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.menubar.MenuBar;
@@ -94,12 +95,13 @@ public class LivroView extends Composite<VerticalLayout> {
     Grid<Livro> grid;
     TextField textField6 = new TextField();
     Button buttonSecondary2 = new Button();
-    Grid grid2 = new Grid();
+    Grid<Edicao> grid2;
 
     HorizontalLayout layoutRow4 = new HorizontalLayout();
     HorizontalLayout layoutRow5 = new HorizontalLayout();
 
     VerticalLayout layoutColumn3 = new VerticalLayout();
+    Hr hr = new Hr();
 
     public LivroView() {
         Tab tabLivro = new Tab("Livro e Edição");
@@ -115,7 +117,7 @@ public class LivroView extends Composite<VerticalLayout> {
                 showLivroTab(content);
             } else if (event.getSelectedTab() == tabPesquisa) {
                 showPesquisa(content);
-            }
+            } 
         });
 
         tabs.setSelectedTab(tabLivro);
@@ -133,7 +135,7 @@ public class LivroView extends Composite<VerticalLayout> {
         getContent().setFlexGrow(1.0, layoutColumn2);
         layoutColumn2.setWidth("100%");
         layoutColumn2.getStyle().set("flex-grow", "1");
-        h3.setText("Cadastrar livro");
+        h3.setText("Cadastrar Livro");
         h3.setWidth("max-content");
         formLayout3Col.setWidth("100%");
         formLayout3Col.setResponsiveSteps(new ResponsiveStep("0", 1), new ResponsiveStep("250px", 2),
@@ -225,6 +227,38 @@ public class LivroView extends Composite<VerticalLayout> {
         layoutRow3.setWidth("100%");
         layoutRow3.getStyle().set("flex-grow", "1");
         buttonPrimary2.setText("Salvar");
+
+        buttonPrimary2.addClickListener(event -> {
+            Edicao edicao = new Edicao();
+            edicao.setAno(Integer.parseInt(textField3.getValue()));
+            edicao.setNovo_conteudo(textField4.getValue());
+            Livro livroSelecionado = (Livro) comboBox3.getValue();
+
+            if (livroSelecionado != null) {
+                edicao.setLivro(livroSelecionado);
+                if (controller.inserir(edicao) == true) {
+                    Notification notification = new Notification(
+                            "Edição salvo com sucesso.", 3000);
+                    notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+                    notification.setPosition(Notification.Position.MIDDLE);
+                    notification.open();
+                } else {
+                    Notification notification = new Notification(
+                            "Erro ao salvar. Verifique se todos os dados foram preenchidos.", 3000);
+                    notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
+                    notification.setPosition(Notification.Position.MIDDLE);
+                    notification.open();
+                }
+            } else {
+                Notification notification = new Notification(
+                        "Por favor, selecione um livro.", 3000);
+                notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
+                notification.setPosition(Notification.Position.MIDDLE);
+                notification.open();
+                return;
+            }
+        });
+
         buttonPrimary2.setWidth("min-content");
         buttonPrimary2.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         layoutColumn2.add(h3);
@@ -238,6 +272,7 @@ public class LivroView extends Composite<VerticalLayout> {
         formLayout2Col.add(link);
         formLayout2Col.add(link2);
         layoutColumn2.add(buttonPrimary);
+        layoutColumn2.add(hr);
         layoutColumn2.add(h32);
         layoutColumn2.add(layoutRow);
         layoutRow.add(layoutRow2);
@@ -249,6 +284,7 @@ public class LivroView extends Composite<VerticalLayout> {
         layoutRow3.add(buttonPrimary2);
         setComboBoxAutorData(comboBox);
         setComboBoxEditoraData(comboBox2);
+        setComboBoxData(comboBox3);
 
         content.add(layoutColumn2);
     }
@@ -317,8 +353,6 @@ public class LivroView extends Composite<VerticalLayout> {
         textField6.setWidth("min-content");
         buttonSecondary2.setText("Pesquisar Edição");
         buttonSecondary2.setWidth("min-content");
-        grid2.setWidth("100%");
-        grid2.getStyle().set("flex-grow", "0");
         layoutColumn3.add(h3);
         layoutColumn3.add(layoutRow4);
         layoutRow4.add(textField5);
@@ -327,10 +361,10 @@ public class LivroView extends Composite<VerticalLayout> {
         layoutColumn3.add(layoutRow5);
         layoutRow5.add(textField6);
         layoutRow5.add(buttonSecondary2);
-        layoutColumn3.add(grid2);
-
+        
         content.add(layoutColumn3);
     }
+
 
     private void setComboBoxData(ComboBox<Livro> comboBox3) {
         List<Livro> livros = controller2.pesquisarTodos();
@@ -360,19 +394,19 @@ public class LivroView extends Composite<VerticalLayout> {
             grid.addColumn(livro -> livro.getAutor().getNome_autor()).setHeader("Autor");
             grid.addColumn(livro -> livro.getEditora().getNome_editora()).setHeader("Editora");
              
-            /* 
+            
             grid.addComponentColumn(livro -> {
 
                 MenuBar menuBar = new MenuBar();
                 
                 MenuItem editarItem = menuBar.addItem(new Icon(VaadinIcon.EDIT), e -> abrirPopupEdicao(livro));
-        //        MenuItem excluirItem = menuBar.addItem(new Icon(VaadinIcon.TRASH), e -> abrirPopupExclusao(livro));
+                MenuItem excluirItem = menuBar.addItem(new Icon(VaadinIcon.TRASH), e -> abrirPopupExclusao(livro));
                 
                 editarItem.getElement().setAttribute("title", "Editar livro");
-        //        excluirItem.getElement().setAttribute("title", "Excluir livro");
+                excluirItem.getElement().setAttribute("title", "Excluir livro");
                 
                 return menuBar;
-            }).setHeader("Opções"); */
+            }).setHeader("Opções"); 
             
             grid.setItems(livros);
             layoutColumn3.add(grid);
@@ -381,22 +415,31 @@ public class LivroView extends Composite<VerticalLayout> {
             grid.setItems(livros);
         }
     }    
-/* 
+
     private void abrirPopupEdicao(Livro livro) {
         Dialog dialog = new Dialog();
         FormLayout formLayout = new FormLayout();
         TextField nomeField = new TextField("Nome");
         nomeField.setValue(livro.getNome_livro());
-        TextField nomeField2 = new TextField("Ano");
-        nomeField2.setValue(String.valueOf(livro.getAno_publicacao()));
-        TextArea nomeField3 = new TextArea("Descrição");
-        nomeField3.setValue(livro.getDescricao());
-        formLayout.add(nomeField);
+        TextField anoField = new TextField("Ano de Publicação");
+        anoField.setValue(String.valueOf(livro.getAno_publicacao()));
+        TextArea descricaoField = new TextArea("Descrição");
+        descricaoField.setValue(livro.getDescricao());
+        ComboBox<Autor> autorComboBox = new ComboBox<>("Autor");
+        autorComboBox.setItemLabelGenerator(Autor::getNome_autor); 
+        autorComboBox.setItems(controller4.pesquisarTodos());
+        autorComboBox.setValue(livro.getAutor());
+        ComboBox<Editora> editoraComboBox = new ComboBox<>("Editora");
+        editoraComboBox.setItemLabelGenerator(Editora::getNome_editora);
+        editoraComboBox.setItems(controller3.pesquisarTodos());
+        editoraComboBox.setValue(livro.getEditora());   
 
         Button confirmarButton = new Button("Confirmar", event -> {
-            nomeField.setValue(livro.getNome_livro());
-            nomeField2.setValue(String.valueOf(livro.getAno_publicacao()));
-            nomeField3.setValue(livro.getDescricao());
+            livro.setNome_livro(nomeField.getValue());
+            livro.setAno_publicacao(Integer.parseInt(anoField.getValue()));
+            livro.setDescricao(descricaoField.getValue());
+            livro.setAutor(autorComboBox.getValue());
+            livro.setEditora(editoraComboBox.getValue());
             if (controller2.alterar(livro)) {
                 Notification.show("Livro alterado com sucesso.").addThemeVariants(NotificationVariant.LUMO_SUCCESS);
                 addGridToConsultaTab(controller2.pesquisarTodos());
@@ -408,7 +451,8 @@ public class LivroView extends Composite<VerticalLayout> {
         });
         Button cancelarButton = new Button("Cancelar", event -> dialog.close());
 
-        formLayout.add(confirmarButton, cancelarButton);
+        formLayout.add(nomeField, anoField, descricaoField, autorComboBox, editoraComboBox, confirmarButton, cancelarButton);
+        dialog.add(formLayout);
         dialog.add(formLayout);
         dialog.open();
     }
@@ -423,5 +467,49 @@ public class LivroView extends Composite<VerticalLayout> {
             editarItem.getElement().setAttribute("title", "Editar livro");
             return menuBar;
         }).setHeader("Opções");
-    }*/
+    }
+
+    private void abrirPopupExclusao(Livro livro) {
+        Dialog dialog = new Dialog();
+        FormLayout formLayout = new FormLayout();
+
+        Span mensagem = new Span("Tem certeza que deseja excluir?");
+        formLayout.add(mensagem);
+
+        NumberField idField = new NumberField("ID");
+        idField.setValue((double) livro.getId());
+        idField.setReadOnly(true);
+        formLayout.add(idField);
+
+        int id = (int) Math.round(idField.getValue());
+        final Livro livroParaExcluir = controller2.pesquisar(id);
+
+        Button confirmarButton = new Button("Confirmar", event -> {
+            if (controller2.excluir(livroParaExcluir)) {
+                Notification.show("Livro excluido com sucesso.").addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+                addGridToConsultaTab(controller2.pesquisarTodos());
+            } else {
+                Notification.show("Erro ao alterar. Verifique se todos os dados foram preenchidos.")
+                        .addThemeVariants(NotificationVariant.LUMO_ERROR);
+            }
+            dialog.close();
+        });
+        Button cancelarButton = new Button("Cancelar", event -> dialog.close());
+
+        formLayout.add(confirmarButton, cancelarButton);
+        dialog.add(formLayout);
+        dialog.open();
+    }
+
+    private void adicionarIconeExclusao(Grid<Livro> grid, Livro livro) {
+        Icon iconEditar = new Icon(VaadinIcon.EDIT);
+        iconEditar.addClickListener(event -> abrirPopupExclusao(livro));
+
+        grid.addComponentColumn(item -> {
+            MenuBar menuBar = new MenuBar();
+            MenuItem editarItem = menuBar.addItem("Exclusao", e -> abrirPopupExclusao(livro));
+            editarItem.getElement().setAttribute("title", "Excluir livro");
+            return menuBar;
+        }).setHeader("Opções");
+    }
 }
