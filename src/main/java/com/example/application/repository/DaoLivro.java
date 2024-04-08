@@ -15,7 +15,7 @@ public class DaoLivro {
 		try {
 			Connection connection = DBConnection.getInstance().getConnection();
 			String insert = "INSERT INTO livro (id, nome_livro, descricao, ano_publicacao, id_autor, id_editora) values"
-					+ "(?, ?, ?, ?, ?)";
+					+ "(?, ?, ?, ?, ?, ?)";
 			PreparedStatement preparedStatement1 = connection.prepareStatement(insert);
 			preparedStatement1.setInt(1, livro.getId());
 			preparedStatement1.setString(2, livro.getNome_livro());
