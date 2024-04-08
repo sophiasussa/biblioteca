@@ -75,6 +75,7 @@ public class EmprestimoView extends Composite<VerticalLayout> {
     TextField textField = new TextField();
     Button buttonSecondary3 = new Button();
     Grid<Emprestimo> grid;
+    Grid<EmpreLivro> grid1;
 
 
     public EmprestimoView() {        

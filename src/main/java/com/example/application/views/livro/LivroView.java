@@ -91,7 +91,7 @@ public class LivroView extends Composite<VerticalLayout> {
 
     TextField textField5 = new TextField();
     Button buttonSecondary = new Button();
-    Grid<Livro> grid = new Grid();
+    Grid<Livro> grid;
     TextField textField6 = new TextField();
     Button buttonSecondary2 = new Button();
     Grid grid2 = new Grid();
@@ -303,8 +303,6 @@ public class LivroView extends Composite<VerticalLayout> {
         });        
 
         buttonSecondary.setWidth("min-content");
-        grid.setWidth("100%");
-        grid.getStyle().set("flex-grow", "0");
         h32.setText("Edição");
         h32.setWidth("max-content");
         layoutRow5.setWidthFull();
@@ -325,7 +323,6 @@ public class LivroView extends Composite<VerticalLayout> {
         layoutColumn3.add(layoutRow4);
         layoutRow4.add(textField5);
         layoutRow4.add(buttonSecondary);
-        layoutColumn3.add(grid);
         layoutColumn3.add(h32);
         layoutColumn3.add(layoutRow5);
         layoutRow5.add(textField6);
