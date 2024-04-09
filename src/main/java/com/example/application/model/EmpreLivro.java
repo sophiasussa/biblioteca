@@ -23,5 +23,4 @@ public class EmpreLivro {
     public void setLivro(Livro livro) {
         this.livro = livro;
     }
-    
 }

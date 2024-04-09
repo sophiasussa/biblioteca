@@ -29,6 +29,7 @@ import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.html.Hr;
+import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.menubar.MenuBar;
@@ -71,10 +72,9 @@ public class EmprestimoView extends Composite<VerticalLayout> {
     H4 h4 = new H4();
     FormLayout formLayout3Col = new FormLayout();
     ComboBox comboBox2 = new ComboBox();
+    ComboBox comboBox3 = new ComboBox();
     HorizontalLayout layoutRow2 = new HorizontalLayout();
     Button buttonPrimary2 = new Button();
-    Button buttonSecondary2 = new Button();
-    Button buttonTertiary2 = new Button();
     Hr hr2 = new Hr();
     HorizontalLayout layoutRow3 = new HorizontalLayout();
     TextField textField = new TextField();
@@ -266,88 +266,6 @@ public class EmprestimoView extends Composite<VerticalLayout> {
 
         });
 
-        buttonSecondary2.setText("Alterar");
-        buttonSecondary2.setWidth("min-content");
-
-/*         buttonSecondary.addClickListener(event -> {
-            int id = (int) Math.round(numberField.getValue());
-
-            if (id > 0) {
-            //    EmpreLivro empreLivro = controller2.pesquisar(id);
-        
-                if (empreLivro != null) {
-                    empreLivro.setLivro(textField.getValue());
-        
-                    if (controller2.alterar(empreLivro)) {
-                        Notification notification = new Notification(
-                                "EmpreLivro alterado com sucesso.", 3000);
-                        notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
-                        notification.setPosition(Notification.Position.MIDDLE);
-                        notification.open();
-                    } else {
-                        Notification notification = new Notification(
-                                "Erro ao alterar. Verifique se todos os dados foram preenchidos.", 3000);
-                        notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
-                        notification.setPosition(Notification.Position.MIDDLE);
-                        notification.open();
-                    }
-                } else {
-                    Notification notification = new Notification(
-                            "EmpreLivro com o ID fornecido não encontrado.", 3000);
-                    notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
-                    notification.setPosition(Notification.Position.MIDDLE);
-                    notification.open();
-                }
-            } else {
-                Notification notification = new Notification(
-                        "ID inválido. Por favor, insira um ID válido.", 3000);
-                notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
-                notification.setPosition(Notification.Position.MIDDLE);
-                notification.open();
-            }     
-        });
-*/
-
-        buttonTertiary2.setText("Deletar");
-        buttonTertiary2.setWidth("min-content");
-        buttonTertiary2.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
-
-/*         buttonTertiary2.addClickListener(event -> {
-            int id = (int) Math.round(numberField2.getValue());
-
-            if (id > 0) {
-                EmpreLivro empreLivro = controller2.pesquisar(id);
-
-                if (empreLivro != null) {
-                    if (controller2.excluir(empreLivro)) {
-                        Notification notification = new Notification(
-                                "EmpreLivro deletado com sucesso.", 3000);
-                        notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
-                        notification.setPosition(Notification.Position.MIDDLE);
-                        notification.open();
-                    } else {
-                        Notification notification = new Notification(
-                                "EmpreLivro ao deletar. Verifique se todos os dados foram preenchidos.", 3000);
-                        notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
-                        notification.setPosition(Notification.Position.MIDDLE);
-                        notification.open();
-                    }
-                } else {
-                    Notification notification = new Notification(
-                            "EmpreLivro com o ID fornecido não encontrado.", 3000);
-                    notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
-                    notification.setPosition(Notification.Position.MIDDLE);
-                    notification.open();
-                }
-            } else {
-                Notification notification = new Notification(
-                        "ID inválido. Por favor, insira um ID válido.", 3000);
-                notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
-                notification.setPosition(Notification.Position.MIDDLE);
-                notification.open();
-            }
-        });
-*/
         layoutRow3.setWidthFull();
         layoutColumn3.setFlexGrow(1.0, layoutRow3);
         layoutRow3.addClassName(Gap.MEDIUM);
@@ -446,8 +364,6 @@ public class EmprestimoView extends Composite<VerticalLayout> {
         formLayout3Col.add(comboBox2);
         layoutColumn3.add(layoutRow2);
         layoutRow2.add(buttonPrimary2);
-        layoutRow2.add(buttonSecondary2);
-        layoutRow2.add(buttonTertiary2);
         layoutColumn3.add(hr2);
         layoutColumn3.add(layoutRow3);
         layoutRow3.add(textField);
@@ -455,6 +371,7 @@ public class EmprestimoView extends Composite<VerticalLayout> {
         layoutRow3.add(pesquisa);
         layoutRow3.add(buttonSecondary4);
         setComboBoxLivroData(comboBox2);
+        setComboBoxEmprestimo(comboBox3);
     }
 
 
@@ -464,6 +381,12 @@ public class EmprestimoView extends Composite<VerticalLayout> {
         comboBox2.setItemLabelGenerator(livro -> livro.getNome_livro());
     }
 
+    private void setComboBoxEmprestimo(ComboBox<Emprestimo> comboBox3) {
+        List<Emprestimo> emprestimos = controller.pesquisarTodos();
+        comboBox3.setItems(emprestimos);
+        comboBox3.setItemLabelGenerator(emprestimo -> String.valueOf(emprestimo.getId()));
+    }
+
     private void addGridToConsultaTab2(List<EmpreLivro> empreLivros) {
         if (grid1 == null) {
             grid1 = new Grid<>();
@@ -471,13 +394,18 @@ public class EmprestimoView extends Composite<VerticalLayout> {
             grid1.addColumn(empreLivro -> empreLivro.getEmprestimo().getData_emprestimo()).setHeader("Data Emprestimo");
             grid1.addColumn(empreLivro -> empreLivro.getLivro().getNome_livro()).setHeader("Nome do Livro");
     
-            /* 
-            grid.addComponentColumn(emprestimo -> {
+            
+            grid1.addComponentColumn(empreLivro -> {
                 MenuBar menuBar = new MenuBar();
-                MenuItem visualizarLivrosItem = menuBar.addItem(new Icon(VaadinIcon.BOOK), e -> visualizarLivros(emprestimo));
-                visualizarLivrosItem.getElement().setAttribute("title", "Visualizar livros");
+                
+                MenuItem editarItem = menuBar.addItem(new Icon(VaadinIcon.EDIT), e -> abrirPopupEdicao(empreLivro));
+                MenuItem excluirItem = menuBar.addItem(new Icon(VaadinIcon.TRASH), e -> abrirPopupExclusao(empreLivro));
+                
+                editarItem.getElement().setAttribute("title", "Editar livro");
+                excluirItem.getElement().setAttribute("title", "Excluir livro");
+
                 return menuBar;
-            }).setHeader("Opções"); */
+            }).setHeader("Opções"); 
     
             grid1.setItems(empreLivros);            
 
@@ -487,6 +415,100 @@ public class EmprestimoView extends Composite<VerticalLayout> {
         }    
     }    
 
+
+    private void abrirPopupEdicao(EmpreLivro empreLivro) {
+        Dialog dialog = new Dialog();
+        FormLayout formLayout = new FormLayout();
+        ComboBox<Livro> livroComboBox = new ComboBox<>("Livro");
+        livroComboBox.setItemLabelGenerator(Livro::getNome_livro); 
+        livroComboBox.setItems(controller3.pesquisarTodos());
+        livroComboBox.setValue(empreLivro.getLivro());
+        ComboBox<Emprestimo> emprestimoComboBox = new ComboBox<>("Emprestimo");
+        emprestimoComboBox.setItemLabelGenerator(emprestimo -> String.valueOf(emprestimo.getId()));
+        emprestimoComboBox.setItems(controller.pesquisarTodos());
+        emprestimoComboBox.setValue(empreLivro.getEmprestimo());   
+
+        Button confirmarButton = new Button("Confirmar", event -> {
+            empreLivro.setLivro(livroComboBox.getValue());
+            empreLivro.setEmprestimo(emprestimoComboBox.getValue());
+            if (controller2.alterar(empreLivro)) {
+                Notification.show("EmpreLivro alterado com sucesso.").addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+                addGridToConsultaTab2(controller2.pesquisarTodos());
+            } else {
+                Notification.show("Erro ao alterar. Verifique se todos os dados foram preenchidos.")
+                        .addThemeVariants(NotificationVariant.LUMO_ERROR);
+            }
+            dialog.close();
+        });
+        Button cancelarButton = new Button("Cancelar", event -> dialog.close());
+
+        formLayout.add(livroComboBox, emprestimoComboBox, confirmarButton, cancelarButton);
+        dialog.add(formLayout);
+        dialog.add(formLayout);
+        dialog.open();
+    }
+
+    private void adicionarIconeEdicao(Grid<EmpreLivro> grid1, EmpreLivro empreLivro) {
+        Icon iconEditar = new Icon(VaadinIcon.EDIT);
+        iconEditar.addClickListener(event -> abrirPopupEdicao(empreLivro));
+
+        grid.addComponentColumn(item -> {
+            MenuBar menuBar = new MenuBar();
+            MenuItem editarItem = menuBar.addItem("Editar", e -> abrirPopupEdicao(empreLivro));
+            editarItem.getElement().setAttribute("title", "Editar empreLivro");
+            return menuBar;
+        }).setHeader("Opções");
+    }
+
+    private void abrirPopupExclusao(EmpreLivro empreLivro) {
+        Dialog dialog = new Dialog();
+        FormLayout formLayout = new FormLayout();
+    
+        Span mensagem = new Span("Tem certeza que deseja excluir?");
+        formLayout.add(mensagem);
+    
+        NumberField idField = new NumberField("ID");
+        idField.setValue((double) empreLivro.getId());
+        idField.setReadOnly(true);
+        formLayout.add(idField);
+    
+        Button confirmarButton = new Button("Confirmar", event -> {
+            int id = (int) Math.round(idField.getValue());
+            final EmpreLivro empreLivroParaExcluir = controller2.pesquisar(id);
+            
+            if (empreLivroParaExcluir != null) {
+                if (controller2.excluir(empreLivroParaExcluir)) {
+                    Notification.show("EmpreLivro excluído com sucesso.").addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+                    addGridToConsultaTab2(controller2.pesquisarTodos());
+                } else {
+                    Notification.show("Erro ao excluir. Verifique se todos os dados foram preenchidos.")
+                            .addThemeVariants(NotificationVariant.LUMO_ERROR);
+                }
+            } else {
+                Notification.show("ID de empreLivro inválido.").addThemeVariants(NotificationVariant.LUMO_ERROR);
+            }
+            
+            dialog.close();
+        });
+        
+        Button cancelarButton = new Button("Cancelar", event -> dialog.close());
+    
+        formLayout.add(confirmarButton, cancelarButton);
+        dialog.add(formLayout);
+        dialog.open();
+    }
+
+    private void adicionarIconeExclusao(Grid<EmpreLivro> grid1, EmpreLivro empreLivro) {
+        Icon iconEditar = new Icon(VaadinIcon.EDIT);
+        iconEditar.addClickListener(event -> abrirPopupExclusao(empreLivro));
+
+        grid.addComponentColumn(item -> {
+            MenuBar menuBar = new MenuBar();
+            MenuItem editarItem = menuBar.addItem("Exclusao", e -> abrirPopupExclusao(empreLivro));
+            editarItem.getElement().setAttribute("title", "Excluir empreLivro");
+            return menuBar;
+        }).setHeader("Opções");
+    }    
 
     private void addGridToConsultaTab(List<Emprestimo> emprestimos) {
         if (grid == null) {
@@ -544,6 +566,5 @@ public class EmprestimoView extends Composite<VerticalLayout> {
         dialog.add(dialogLayout);
         dialog.open();
     }
-
 }
 

@@ -80,8 +80,6 @@ public class DaoEmpreLivro {
             ResultSet resultSet = preparedStatement1.executeQuery();
             while (resultSet.next()) {
                 empreLivro.setId(resultSet.getInt("id"));
-                empreLivro.getLivro().setId(resultSet.getInt("id_livro"));
-                empreLivro.getEmprestimo().setId(resultSet.getInt("id_emprestimo"));
                 Livro livro = new DaoLivro().pesquisar(resultSet.getInt("id_livro"));
                 empreLivro.setLivro(livro);
                 Emprestimo emprestimo = new DaoEmprestimo().pesquisar(resultSet.getInt("id_emprestimo"));
