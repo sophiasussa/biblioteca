@@ -69,6 +69,7 @@ public class DaoEdicao {
 			}
 
 		} catch (Exception e) {
+			e.printStackTrace();
 			return false;
 		}
 	}

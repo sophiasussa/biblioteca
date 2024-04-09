@@ -353,6 +353,36 @@ public class LivroView extends Composite<VerticalLayout> {
         textField6.setWidth("min-content");
         buttonSecondary2.setText("Pesquisar Edição");
         buttonSecondary2.setWidth("min-content");
+
+        buttonSecondary2.addClickListener(event -> {
+            if (textField6.isEmpty()) {
+                List<Edicao> edicao = controller.pesquisarTodos();
+                addGridToConsultaTab2(edicao);
+            } else {
+                try {
+                    int id = (int) Math.round(Double.parseDouble(textField6.getValue()));
+                    Edicao edicao = controller.pesquisar(id);
+                    if (edicao != null) {
+                        List<Edicao> edicaoEncontrados = new ArrayList<>();
+                        edicaoEncontrados.add(edicao);
+                        addGridToConsultaTab2(edicaoEncontrados);
+                    } else {
+                        Notification notification = new Notification(
+                                "Edicao com o ID fornecido não encontrado.", 3000);
+                        notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
+                        notification.setPosition(Notification.Position.MIDDLE);
+                        notification.open();
+                    }
+                } catch (NumberFormatException e) {
+                    Notification notification = new Notification(
+                            "ID inválido. Por favor, insira um ID válido.", 3000);
+                    notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
+                    notification.setPosition(Notification.Position.MIDDLE);
+                    notification.open();
+                }
+            }
+        });        
+
         layoutColumn3.add(h3);
         layoutColumn3.add(layoutRow4);
         layoutRow4.add(textField5);
@@ -509,6 +539,123 @@ public class LivroView extends Composite<VerticalLayout> {
             MenuBar menuBar = new MenuBar();
             MenuItem editarItem = menuBar.addItem("Exclusao", e -> abrirPopupExclusao(livro));
             editarItem.getElement().setAttribute("title", "Excluir livro");
+            return menuBar;
+        }).setHeader("Opções");
+    }
+
+    private void addGridToConsultaTab2(List<Edicao> edicoes) {
+        if (grid2 == null) {
+            grid2 = new Grid<>();
+            grid2.addColumn(Edicao::getId).setHeader("ID");
+            grid2.addColumn(Edicao::getAno).setHeader("Ano");
+            grid2.addColumn(Edicao::getNovo_conteudo).setHeader("Novo Conteudo");
+            grid2.addColumn(edicao -> edicao.getLivro().getNome_livro()).setHeader("Livro");
+                         
+            grid2.addComponentColumn(edicao -> {
+
+                MenuBar menuBar = new MenuBar();
+                
+                MenuItem editarItem = menuBar.addItem(new Icon(VaadinIcon.EDIT), e -> abrirPopupEdicao2(edicao));
+                MenuItem excluirItem = menuBar.addItem(new Icon(VaadinIcon.TRASH), e -> abrirPopupExclusao2(edicao));
+                
+                editarItem.getElement().setAttribute("title", "Editar Edição");
+                excluirItem.getElement().setAttribute("title", "Excluir Edição");
+                
+                return menuBar;
+            }).setHeader("Opções"); 
+            
+            grid2.setItems(edicoes);
+            layoutColumn3.add(grid2);
+        } else {
+            
+            grid2.setItems(edicoes);
+        }
+    }   
+    
+    
+    private void abrirPopupEdicao2(Edicao edicao) {
+        Dialog dialog = new Dialog();
+        FormLayout formLayout = new FormLayout();
+        TextField anoField = new TextField("Ano");
+        anoField.setValue(String.valueOf(edicao.getAno()));
+        TextField nomeField = new TextField("Novo Conteudo");
+        nomeField.setValue(edicao.getNovo_conteudo()); 
+        ComboBox<Livro> livroComboBox = new ComboBox<>("Livro");
+        livroComboBox.setItemLabelGenerator(Livro::getNome_livro); 
+        livroComboBox.setItems(controller2.pesquisarTodos());
+        livroComboBox.setValue(edicao.getLivro());
+
+
+        Button confirmarButton = new Button("Confirmar", event -> {
+            edicao.setAno(Integer.parseInt(anoField.getValue()));
+            edicao.setNovo_conteudo(nomeField.getValue());
+            edicao.setLivro(livroComboBox.getValue());
+            if (controller.alterar(edicao)) {
+                Notification.show("Edicao alterado com sucesso.").addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+                addGridToConsultaTab2(controller.pesquisarTodos());
+            } else {
+                Notification.show("Erro ao alterar. Verifique se todos os dados foram preenchidos.")
+                        .addThemeVariants(NotificationVariant.LUMO_ERROR);
+            }
+            dialog.close();
+        });
+        Button cancelarButton = new Button("Cancelar", event -> dialog.close());
+
+        formLayout.add(anoField, nomeField, livroComboBox, confirmarButton, cancelarButton);
+        dialog.add(formLayout);
+        dialog.add(formLayout);
+        dialog.open();
+    }
+
+    private void adicionarIconeEdicao2(Grid<Edicao> grid2, Edicao edicao) {
+        Icon iconEditar = new Icon(VaadinIcon.EDIT);
+        iconEditar.addClickListener(event -> abrirPopupEdicao2(edicao));
+
+        grid.addComponentColumn(item -> {
+            MenuBar menuBar = new MenuBar();
+            MenuItem editarItem = menuBar.addItem("Editar", e -> abrirPopupEdicao2(edicao));
+            editarItem.getElement().setAttribute("title", "Editar edicao");
+            return menuBar;
+        }).setHeader("Opções");
+    }
+
+    private void abrirPopupExclusao2(Edicao edicao) {
+        Dialog dialog = new Dialog();
+        FormLayout formLayout = new FormLayout();
+
+        Span mensagem = new Span("Tem certeza que deseja excluir?");
+        formLayout.add(mensagem);
+
+        NumberField idField = new NumberField("ID");
+        idField.setValue((double) edicao.getId());
+        idField.setReadOnly(true);
+        formLayout.add(idField);
+
+        Button confirmarButton = new Button("Confirmar", event -> {
+            if (controller.excluir(edicao)) {
+                Notification.show("Edicao excluida com sucesso.").addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+                addGridToConsultaTab2(controller.pesquisarTodos());
+            } else {
+                Notification.show("Erro ao alterar. Verifique se todos os dados foram preenchidos.")
+                        .addThemeVariants(NotificationVariant.LUMO_ERROR);
+            }
+            dialog.close();
+        });
+        Button cancelarButton = new Button("Cancelar", event -> dialog.close());
+
+        formLayout.add(confirmarButton, cancelarButton);
+        dialog.add(formLayout);
+        dialog.open();
+    }
+
+    private void adicionarIconeExclusao2(Grid<Edicao> grid2, Edicao edicao) {
+        Icon iconEditar = new Icon(VaadinIcon.EDIT);
+        iconEditar.addClickListener(event -> abrirPopupExclusao2(edicao));
+
+        grid.addComponentColumn(item -> {
+            MenuBar menuBar = new MenuBar();
+            MenuItem editarItem = menuBar.addItem("Exclusao", e -> abrirPopupExclusao2(edicao));
+            editarItem.getElement().setAttribute("title", "Excluir edicao");
             return menuBar;
         }).setHeader("Opções");
     }
