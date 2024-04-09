@@ -52,6 +52,7 @@ import org.springframework.data.domain.PageRequest;
 public class EmprestimoView extends Composite<VerticalLayout> {
     ControllerEmprestimo controller = new ControllerEmprestimo();
     ControllerEmpreLivro controller2 = new ControllerEmpreLivro();
+    ControllerLivro controller3 = new ControllerLivro();
     VerticalLayout layoutColumn2 = new VerticalLayout();
     H3 h3 = new H3();
     Hr hr = new Hr();
@@ -65,7 +66,7 @@ public class EmprestimoView extends Composite<VerticalLayout> {
     Button buttonTertiary = new Button();
     H4 h4 = new H4();
     FormLayout formLayout3Col = new FormLayout();
-    ComboBox<Livro> comboBox2 = new ComboBox();
+    ComboBox comboBox2 = new ComboBox();
     HorizontalLayout layoutRow2 = new HorizontalLayout();
     Button buttonPrimary2 = new Button();
     Button buttonSecondary2 = new Button();
@@ -228,8 +229,8 @@ public class EmprestimoView extends Composite<VerticalLayout> {
 
         buttonPrimary2.addClickListener(event -> {
             EmpreLivro empreLivro = new EmpreLivro();
-            int emprestimoId = Integer.parseInt((String.valueOf(numberField.getValue())));
-            Livro livroSelecionado = comboBox2.getValue();
+            Livro livroSelecionado = (Livro) comboBox2.getValue();
+            int emprestimoId = (int) Math.round(numberField.getValue());
             Emprestimo emprestimoSelecionado = controller.pesquisar(emprestimoId);
         
             if (livroSelecionado != null && emprestimoSelecionado != null) {
@@ -237,7 +238,7 @@ public class EmprestimoView extends Composite<VerticalLayout> {
                 empreLivro.setEmprestimo(emprestimoSelecionado);
                 if (controller2.inserir(empreLivro) == true) {
                     Notification notification = new Notification(
-                            "Livro salvo com sucesso.", 3000);
+                            "EmpreLivro salvo com sucesso.", 3000);
                     notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
                     notification.setPosition(Notification.Position.MIDDLE);
                     notification.open();
@@ -410,6 +411,14 @@ public class EmprestimoView extends Composite<VerticalLayout> {
         layoutColumn3.add(layoutRow3);
         layoutRow3.add(textField);
         layoutRow3.add(buttonSecondary3);
+        setComboBoxLivroData(comboBox2);
+    }
+
+
+    private void setComboBoxLivroData(ComboBox<Livro> comboBox2) {
+        List<Livro> livros = controller3.pesquisarTodos();
+        comboBox2.setItems(livros);
+        comboBox2.setItemLabelGenerator(livro -> livro.getNome_livro());
     }
 
     private void addGridToConsultaTab(List<Emprestimo> emprestimos) {

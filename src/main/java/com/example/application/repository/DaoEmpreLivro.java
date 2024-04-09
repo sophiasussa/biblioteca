@@ -12,7 +12,7 @@ public class DaoEmpreLivro {
     public boolean inserir(EmpreLivro empreLivro) {
         try {
             Connection connection = DBConnection.getInstance().getConnection();
-            String insert = "INSERT into empre_livro (id, emprestimo, livro) values (?, ?, ?)";
+            String insert = "INSERT into empre_livro (id, id_emprestimo, id_livro) values (?, ?, ?)";
             PreparedStatement preparedStatement1 = connection.prepareStatement(insert);
             preparedStatement1.setInt(1, empreLivro.getId());
             preparedStatement1.setInt(2, empreLivro.getEmprestimo().getId());
