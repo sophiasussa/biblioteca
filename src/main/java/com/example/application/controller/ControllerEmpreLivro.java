@@ -19,13 +19,20 @@ public class ControllerEmpreLivro {
 		return dao.excluir(empreLivro);
 	}
 	
-	public List<EmpreLivro> pesquisar(int id) {
+	public EmpreLivro pesquisar(int id) {
 		return dao.pesquisar(id);
 	}
 	
 	public List<EmpreLivro> pesquisarTodos() {
-		return dao.pesquisarTodos();
+		try {
+			return dao.pesquisarTodos();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
-
+	public List<EmpreLivro> pesquisarPorIdEmprestimo(int idEmprestimo){
+		return dao.pesquisarPorIdEmprestimo(idEmprestimo);
+	}
 }

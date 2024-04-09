@@ -17,8 +17,10 @@ import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
+import com.vaadin.flow.component.contextmenu.MenuItem;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.dependency.Uses;
+import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.formlayout.FormLayout.ResponsiveStep;
 import com.vaadin.flow.component.notification.Notification;
@@ -28,6 +30,8 @@ import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.html.Hr;
 import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.menubar.MenuBar;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment;
 import com.vaadin.flow.component.orderedlayout.FlexComponent.JustifyContentMode;
@@ -77,6 +81,8 @@ public class EmprestimoView extends Composite<VerticalLayout> {
     Button buttonSecondary3 = new Button();
     Grid<Emprestimo> grid;
     Grid<EmpreLivro> grid1;
+    Button buttonSecondary4 = new Button();
+    TextField pesquisa = new TextField();
 
 
     public EmprestimoView() {        
@@ -349,7 +355,42 @@ public class EmprestimoView extends Composite<VerticalLayout> {
         layoutRow3.getStyle().set("flex-grow", "1");
         layoutRow3.setAlignItems(Alignment.START);
         layoutRow3.setJustifyContentMode(JustifyContentMode.END); 
-        
+
+        pesquisa.setLabel("");
+        pesquisa.setPrefixComponent(new Icon("lumo", "search"));
+        pesquisa.setWidth("min-content");
+        buttonSecondary4.setText("Pesquisar EmpreLivros");
+        buttonSecondary4.setWidth("min-content");
+
+        buttonSecondary4.addClickListener(event -> {
+            if (pesquisa.isEmpty()) {
+                List<EmpreLivro> empreLivros = controller2.pesquisarTodos();
+                addGridToConsultaTab2(empreLivros);
+            }else{
+                try{
+                    int id = (int) Math.round(Double.parseDouble(pesquisa.getValue()));
+                    EmpreLivro empreLivro = controller2.pesquisar(id);
+                    if (empreLivro != null) {
+                        List<EmpreLivro> empreLivroEncontrados = new ArrayList<>();
+                        empreLivroEncontrados.add(empreLivro);
+                        addGridToConsultaTab2(empreLivroEncontrados);
+                    } else {
+                        Notification notification = new Notification(
+                                "EmpreLivro com o ID fornecido não encontrado.", 3000);
+                        notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
+                        notification.setPosition(Notification.Position.MIDDLE);
+                        notification.open();
+                    }
+                }catch (NumberFormatException e) {
+                    Notification notification = new Notification(
+                            "ID inválido. Por favor, insira um ID válido.", 3000);
+                    notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
+                    notification.setPosition(Notification.Position.MIDDLE);
+                    notification.open();
+                }
+            }
+        });
+      
         textField.setLabel("");
         textField.setPrefixComponent(new Icon("lumo", "search"));
         textField.setWidth("min-content");
@@ -411,6 +452,8 @@ public class EmprestimoView extends Composite<VerticalLayout> {
         layoutColumn3.add(layoutRow3);
         layoutRow3.add(textField);
         layoutRow3.add(buttonSecondary3);
+        layoutRow3.add(pesquisa);
+        layoutRow3.add(buttonSecondary4);
         setComboBoxLivroData(comboBox2);
     }
 
@@ -421,38 +464,86 @@ public class EmprestimoView extends Composite<VerticalLayout> {
         comboBox2.setItemLabelGenerator(livro -> livro.getNome_livro());
     }
 
+    private void addGridToConsultaTab2(List<EmpreLivro> empreLivros) {
+        if (grid1 == null) {
+            grid1 = new Grid<>();
+            grid1.addColumn(EmpreLivro::getId).setHeader("ID");
+            grid1.addColumn(empreLivro -> empreLivro.getEmprestimo().getData_emprestimo()).setHeader("Data Emprestimo");
+            grid1.addColumn(empreLivro -> empreLivro.getLivro().getNome_livro()).setHeader("Nome do Livro");
+    
+            /* 
+            grid.addComponentColumn(emprestimo -> {
+                MenuBar menuBar = new MenuBar();
+                MenuItem visualizarLivrosItem = menuBar.addItem(new Icon(VaadinIcon.BOOK), e -> visualizarLivros(emprestimo));
+                visualizarLivrosItem.getElement().setAttribute("title", "Visualizar livros");
+                return menuBar;
+            }).setHeader("Opções"); */
+    
+            grid1.setItems(empreLivros);            
+
+            layoutColumn3.add(grid1);
+        } else {
+            grid1.setItems(empreLivros);     
+        }    
+    }    
+
+
     private void addGridToConsultaTab(List<Emprestimo> emprestimos) {
         if (grid == null) {
             grid = new Grid<>();
             grid.addColumn(Emprestimo::getId).setHeader("ID");
-            grid.addColumn(Emprestimo::getData_emprestimo).setHeader("Nome");
-
+            grid.addColumn(Emprestimo::getData_emprestimo).setHeader("Data Emprestimo");
+    
             grid.setItems(emprestimos);
-
-            grid.addItemDoubleClickListener(event -> {
-                Emprestimo emprestimo = event.getItem();
-                if (emprestimo != null) {
-                    numberField.setValue(Double.parseDouble(String.valueOf(emprestimo.getId())));
-                    txtData.setValue(String.valueOf(emprestimo.getData_emprestimo()));
-                }
-            });
-        }else{
-            layoutColumn3.remove(grid);
-            grid = null;
-
-            grid = new Grid<>();
-            grid.addColumn(Emprestimo::getId).setHeader("ID");
-            grid.addColumn(Emprestimo::getData_emprestimo).setHeader("Nome");
-            grid.setItems(emprestimos);
+    
+            grid.addComponentColumn(emprestimo -> {
+                MenuBar menuBar = new MenuBar();
+                MenuItem visualizarLivrosItem = menuBar.addItem(new Icon(VaadinIcon.BOOK), e -> visualizarLivros(emprestimo));
+                visualizarLivrosItem.getElement().setAttribute("title", "Visualizar livros");
+                return menuBar;
+            }).setHeader("Opções"); 
     
             grid.addItemDoubleClickListener(event -> {
                 Emprestimo emprestimo = event.getItem();
                 if (emprestimo != null) {
-                    numberField.setValue(Double.parseDouble(String.valueOf(emprestimo.getId())));
+                    numberField.setValue((double) emprestimo.getId());
                     txtData.setValue(String.valueOf(emprestimo.getData_emprestimo()));
                 }
             });
+            layoutColumn3.add(grid);
+        } else {
+            grid.setItems(emprestimos);     
         }    
-        layoutColumn3.add(grid);
     }
+        
+    private void visualizarLivros(Emprestimo emprestimo) {
+        Dialog dialog = new Dialog();
+        dialog.setWidth("500px");
+        dialog.setHeight("300px");
+    
+        Grid<EmpreLivro> gridEmpreLivros = new Grid<>();
+        gridEmpreLivros.addColumn(EmpreLivro::getId).setHeader("ID");
+        gridEmpreLivros.addColumn(empreLivro -> empreLivro.getEmprestimo().getId()).setHeader("ID Emprestimo");
+        gridEmpreLivros.addColumn(empreLivro -> empreLivro.getLivro().getNome_livro()).setHeader("Nome do Livro");
+    
+        List<EmpreLivro> empreLivros = controller2.pesquisarPorIdEmprestimo(emprestimo.getId());
+        if (empreLivros != null) {
+            gridEmpreLivros.setItems(empreLivros);
+        } else {
+            Notification notification = new Notification(
+                    "Erro ao buscar os livros do empréstimo.", 3000);
+            notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
+            notification.setPosition(Notification.Position.MIDDLE);
+            notification.open();
+        }
+    
+        Button fecharButton = new Button("Fechar", event -> dialog.close());
+    
+        VerticalLayout dialogLayout = new VerticalLayout();
+        dialogLayout.add(gridEmpreLivros, fecharButton);
+        dialog.add(dialogLayout);
+        dialog.open();
+    }
+
 }
+

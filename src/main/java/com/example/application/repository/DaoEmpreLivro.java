@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.example.application.model.EmpreLivro;
+import com.example.application.model.Emprestimo;
+import com.example.application.model.Livro;
 
 public class DaoEmpreLivro {
     public boolean inserir(EmpreLivro empreLivro) {
@@ -33,7 +35,7 @@ public class DaoEmpreLivro {
     public boolean alterar(EmpreLivro empreLivro) {
         try {
             Connection connection = DBConnection.getInstance().getConnection();
-            String update = "UPDATE empre_livro set emprestimo = ?, livro = ? where id = ?";
+            String update = "UPDATE empre_livro set id_emprestimo = ?, id_livro = ? where id = ?";
             PreparedStatement preparedStatement1 = connection.prepareStatement(update);
             preparedStatement1.setInt(3, empreLivro.getId());
             preparedStatement1.setInt(1, empreLivro.getEmprestimo().getId());
@@ -68,22 +70,24 @@ public class DaoEmpreLivro {
         }
     }
 
-    public List<EmpreLivro> pesquisar(int id) {
+    public EmpreLivro pesquisar(int id) {
         try {
             Connection connection = DBConnection.getInstance().getConnection();
             String consulta = "SELECT * from empre_livro where id = ?";
             EmpreLivro empreLivro = new EmpreLivro();
-            List<EmpreLivro> lista = new ArrayList<EmpreLivro>();
             PreparedStatement preparedStatement1 = connection.prepareStatement(consulta);
-            preparedStatement1.setInt(1, empreLivro.getId());
+            preparedStatement1.setInt(1, id);
             ResultSet resultSet = preparedStatement1.executeQuery();
             while (resultSet.next()) {
                 empreLivro.setId(resultSet.getInt("id"));
-                empreLivro.getLivro().setId(resultSet.getInt("id"));
-                empreLivro.getEmprestimo().setId(resultSet.getInt("id"));
-                lista.add(empreLivro);
+                empreLivro.getLivro().setId(resultSet.getInt("id_livro"));
+                empreLivro.getEmprestimo().setId(resultSet.getInt("id_emprestimo"));
+                Livro livro = new DaoLivro().pesquisar(resultSet.getInt("id_livro"));
+                empreLivro.setLivro(livro);
+                Emprestimo emprestimo = new DaoEmprestimo().pesquisar(resultSet.getInt("id_emprestimo"));
+                empreLivro.setEmprestimo(emprestimo);
             }
-            return lista;
+            return empreLivro;
         } catch (Exception e) {
             return null;
         }
@@ -100,13 +104,41 @@ public class DaoEmpreLivro {
             while (resultSet.next()) {
                 empreLivro = new EmpreLivro();
                 empreLivro.setId(resultSet.getInt("id"));
-                empreLivro.getLivro().setId(resultSet.getInt("id"));
-                empreLivro.getEmprestimo().setId(resultSet.getInt("id"));
+                Livro livro = new DaoLivro().pesquisar(resultSet.getInt("id_livro"));
+                empreLivro.setLivro(livro);
+                Emprestimo emprestimo = new DaoEmprestimo().pesquisar(resultSet.getInt("id_emprestimo"));
+                empreLivro.setEmprestimo(emprestimo);
                 lista.add(empreLivro);
             }
             return lista;
         } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+   }
+
+   public List<EmpreLivro> pesquisarPorIdEmprestimo(int idEmprestimo) {
+        try {
+            Connection connection = DBConnection.getInstance().getConnection();
+            String consulta = "SELECT * FROM empre_livro WHERE id_emprestimo = ?";
+            List<EmpreLivro> lista = new ArrayList<>();
+            PreparedStatement preparedStatement = connection.prepareStatement(consulta);
+            preparedStatement.setInt(1, idEmprestimo);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                EmpreLivro empreLivro = new EmpreLivro();
+                empreLivro.setId(resultSet.getInt("id"));
+                Livro livro = new DaoLivro().pesquisar(resultSet.getInt("id_livro"));
+                empreLivro.setLivro(livro);
+                Emprestimo emprestimo = new DaoEmprestimo().pesquisar(resultSet.getInt("id_emprestimo"));
+                empreLivro.setEmprestimo(emprestimo);
+                lista.add(empreLivro);
+            }
+            return lista;
+        } catch (Exception e) {
+            e.printStackTrace();
             return null;
         }
     }
+
 }
